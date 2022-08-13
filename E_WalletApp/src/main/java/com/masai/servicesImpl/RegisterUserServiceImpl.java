@@ -73,7 +73,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		transaction.setTransactionId(7874474);
 		transaction.setTransationType("Charus and ganja");
 		transaction.setTransactionAmount(3456.7);
-		transaction.setDescription("Sauk badee cheej hai... Tum kiya jano raesh babu...Kabhee haveli pe aao tab batayenge...Samjhe kee Nahee...?");
+		transaction.setDescription("Sauk badee");
 		
 		transactions.add(transaction);
 		
