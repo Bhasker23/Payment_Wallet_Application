@@ -62,18 +62,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		
 	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
 		
-<<<<<<< HEAD
-		transaction.setTransactionId(7874474);
-		transaction.setTransationType("Charus and ganja");
-		transaction.setTransactionAmount(3456.7);
-		transaction.setDescription("Sauk badee");
-		
-		transactions.add(transaction);
-		
-		user.setTransactions(transactions);//user will add their transactions after wallet account creation
-		 
-=======
->>>>>>> 99813231d59360cc287e1d52e841e5773544b846
+
 		customerDB.save(customer);
 		walletDB.save(wallet);
 		transactionDB.save(transaction);
