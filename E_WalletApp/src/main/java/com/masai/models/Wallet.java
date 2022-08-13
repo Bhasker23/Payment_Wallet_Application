@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Wallet {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer walletId;
 	private Double balance;
-	
+
 }

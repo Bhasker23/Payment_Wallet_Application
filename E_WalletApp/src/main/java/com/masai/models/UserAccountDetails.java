@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.ForeignKey;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,13 +18,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAccountDetails {
-	
+
 	@Id
 	@JoinColumn(name = "uerId")
 	private String id;
-	
+
 	@OneToOne
-	@JoinColumn(name = "customerId" )
+	@JoinColumn(name = "customerId")
 	private Customer customer;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
@@ -36,5 +34,5 @@ public class UserAccountDetails {
 	private Set<BeneficiaryDetails> beneficiaryDetails;
 	@OneToOne
 	private Wallet wallet;
-	
+
 }

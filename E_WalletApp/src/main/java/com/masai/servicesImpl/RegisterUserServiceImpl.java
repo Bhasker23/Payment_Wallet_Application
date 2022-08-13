@@ -23,45 +23,41 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 	@Autowired
 	private RegisterUserDAL userDB;
-	
+
 	@Autowired
 	private SaveCustomerDAL customerDB;
-	
+
 	@Autowired
 	private SaveBankAccDAL bankaccDB;
-	
+
 	@Autowired
 	private SaveBeneficiaryDAL beneficiaryDB;
-	
+
 	@Autowired
 	private SaveTransactionDAL transactionDB;
-	
+
 	@Autowired
 	private SaveWalletDAL walletDB;
-	
 
 	@Override
 	public UserAccountDetails registerUser(Customer customer) {
-		
-		if((userDB.findById(customer.getPhone())).isPresent()) {
+
+		if ((userDB.findById(customer.getPhone())).isPresent()) {
 			throw new UserAlreadyExistException("You are already SignedUp please Login.");
-			}
-		
-		
+		}
+
 		UserAccountDetails user = new UserAccountDetails();
-		
-		
+
 		user.setId(customer.getPhone());
-	    user.setCustomer(customer);
-	    
+		user.setCustomer(customer);
+
 		Wallet wallet = new Wallet();
 		user.setWallet(wallet);
-		
+
 		Transaction transaction = new Transaction();
 		BankAccount bankAcc = new BankAccount();
-		
-	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
-		
+
+		BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
 
 		customerDB.save(customer);
 		walletDB.save(wallet);
@@ -70,7 +66,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		beneficiaryDB.save(beniBeneficiaryDetail);
 		return userDB.save(user);
 	}
-	//this method will be add in Add bank account serviceIMPL
+	// this method will be add in Add bank account serviceIMPL
 //	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
 //		
 //		UserAccountDetails user = (userDB.findById("67890")).get();

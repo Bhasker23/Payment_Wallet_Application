@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.models.BankAccount;
 import com.masai.models.Customer;
 import com.masai.models.UserAccountDetails;
 import com.masai.servicesImpl.RegisterUserServiceImpl;
@@ -19,16 +18,13 @@ public class RegisterUserController {
 
 	@Autowired
 	private RegisterUserServiceImpl curd;
-	
+
 	@PostMapping("/register")
 	public ResponseEntity<UserAccountDetails> registerUser(@RequestBody Customer customer) {
-		
+
 		UserAccountDetails savedCustomer = curd.registerUser(customer);
-		
-		
-		
-		return new ResponseEntity<>(savedCustomer,HttpStatus
-				.CREATED);
+
+		return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
 	}
 //	//this method will be add in Add bank account controller;
 //	@PostMapping("/addBank")

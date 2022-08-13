@@ -5,7 +5,6 @@ import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -13,11 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
-	
-   @Id
+
+	@Id
 	private String phone;
 	private String name;
 	private String password;
-	
-	
+
 }

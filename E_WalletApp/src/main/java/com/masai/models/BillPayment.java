@@ -10,14 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillPayment {
-  
+
 	@Id
 	private Integer billId;
 	private Wallet wallet;
 	private Double billBmount;
 	private String billType;
-	
-	
-	
-	
+
 }

@@ -20,4 +20,5 @@ public class BeneficiaryDetails {
 	private Integer id;
 	private String phoneNumber;
 	private String name;
+
 }
