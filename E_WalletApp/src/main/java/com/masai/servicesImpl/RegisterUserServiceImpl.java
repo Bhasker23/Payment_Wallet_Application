@@ -62,6 +62,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		
 	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
 		
+
 		customerDB.save(customer);
 		walletDB.save(wallet);
 		transactionDB.save(transaction);
