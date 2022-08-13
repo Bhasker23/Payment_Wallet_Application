@@ -1,11 +1,9 @@
 package com.masai.servicesImpl;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.models.BankAccount;
 import com.masai.models.BeneficiaryDetails;
 import com.masai.models.Customer;
@@ -45,12 +43,19 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	@Override
 	public UserAccountDetails registerUser(Customer customer) {
 		
+		if((userDB.findById(customer.getPhone())).isPresent()) {
+			throw new UserAlreadyExistException("You are already SignedUp please Login.");
+			}
+		
+		
 		UserAccountDetails user = new UserAccountDetails();
+		
 		
 		user.setId(customer.getPhone());
 	    user.setCustomer(customer);
 	    
 		Wallet wallet = new Wallet();
+<<<<<<< HEAD
 		wallet.setBalance(108.1);
 //		wallet.setWalletId(1);
 		user.setWallet(wallet);
@@ -68,8 +73,15 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		user.setBeneficiaryDetails(beneficiaryDetails);;//user will add their beneficiary after wallet account creation
 		
 		Set<Transaction> transactions = new HashSet<>();
-		Transaction transaction = new Transaction();
+=======
+		user.setWallet(wallet);
 		
+>>>>>>> 99813231d59360cc287e1d52e841e5773544b846
+		Transaction transaction = new Transaction();
+		BankAccount bankAcc = new BankAccount();
+	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
+		
+<<<<<<< HEAD
 		transaction.setTransactionId(7774474);
 		transaction.setTransationType("Charus and ganja");
 		transaction.setTransactionAmount(3456.7);
@@ -79,13 +91,26 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		
 		user.setTransactions(transactions);//user will add their transactions after wallet account creation
 		 
+=======
+>>>>>>> 99813231d59360cc287e1d52e841e5773544b846
 		customerDB.save(customer);
 		walletDB.save(wallet);
 		transactionDB.save(transaction);
 		bankaccDB.save(bankAcc);
-		beneficiaryDB.save(beneficiaryDetail2);
-	
+		beneficiaryDB.save(beniBeneficiaryDetail);
 		return userDB.save(user);
 	}
+	//this method will be add in Add bank account serviceIMPL
+//	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
+//		
+//		UserAccountDetails user = (userDB.findById("67890")).get();
+//		
+//		user.getBankAccounts().add(bankAccount);
+//		
+//		userDB.save(user);
+//		
+//		return (userDB.findById("67890")).get();
+//		
+//	}
 
 }
