@@ -38,14 +38,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(exceptionDetails,HttpStatus.BAD_REQUEST);
 	}
 	
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr){
-//		ExceptionDetails exceptionDetails = new ExceptionDetails();
-//		exceptionDetails.setMessage(ex.getMessage());
-//		exceptionDetails.setDescription(wr.getDescription(false));
-//		exceptionDetails.setLocalDate(LocalDate.now());
-//		
-//		return new ResponseEntity<>(exceptionDetails,HttpStatus.BAD_REQUEST);
-//	}
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr){
+		ExceptionDetails exceptionDetails = new ExceptionDetails();
+		exceptionDetails.setMessage(ex.getMessage());
+		exceptionDetails.setDescription(wr.getDescription(false));
+		exceptionDetails.setLocalDate(LocalDate.now());
+		
+		return new ResponseEntity<>(exceptionDetails,HttpStatus.BAD_REQUEST);
+	}
 
 }
