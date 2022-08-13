@@ -52,17 +52,17 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    
 		Wallet wallet = new Wallet();
 		wallet.setBalance(108.1);
-		wallet.setWalletId(1);
+//		wallet.setWalletId(1);
 		user.setWallet(wallet);
 		
 		Set<BankAccount> bankAccounts = new HashSet<>();
-		BankAccount bankAcc =new BankAccount(787845672, "EQIT23423", "Eqitas Finance Bank", 345680.3);
+		BankAccount bankAcc =new BankAccount(7878456, "EQIT23423", "Eqitas Finance Bank", 345680.3);
 		bankAccounts.add(bankAcc);
 		user.setBankAccounts(bankAccounts);//user will add their bank account after wallet account creation
 	    
 		Set<BeneficiaryDetails> beneficiaryDetails = new HashSet<>();
 	    //BeneficiaryDetails beneficiaryDetail = new BeneficiaryDetails("7492004935", "Satym Kumar Jha");
-	    BeneficiaryDetails beneficiaryDetail2 = new BeneficiaryDetails("8208038245", "Laxmi Didi");
+	    BeneficiaryDetails beneficiaryDetail2 = new BeneficiaryDetails("8208038", "Laxmi Didi");
 		//beneficiaryDetails.add(beneficiaryDetail2);
 		beneficiaryDetails.add(beneficiaryDetail2);
 		user.setBeneficiaryDetails(beneficiaryDetails);;//user will add their beneficiary after wallet account creation
@@ -70,11 +70,11 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		Set<Transaction> transactions = new HashSet<>();
 		Transaction transaction = new Transaction();
 		
-		transaction.setTransactionId(7874474);
+//		
 		transaction.setTransationType("Charus and ganja");
 		transaction.setTransactionAmount(3456.7);
 		transaction.setDescription("Sauk badee cheej hai... Tum kiya jano raesh babu...Kabhee haveli pe aao tab batayenge...Samjhe kee Nahee...?");
-		
+//		
 		transactions.add(transaction);
 		
 		user.setTransactions(transactions);//user will add their transactions after wallet account creation

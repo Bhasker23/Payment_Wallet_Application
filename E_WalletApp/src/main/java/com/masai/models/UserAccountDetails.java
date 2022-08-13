@@ -9,11 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.ForeignKey;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Entity
 @Data
@@ -34,7 +33,7 @@ public class UserAccountDetails {
 	private Set<BankAccount> bankAccounts;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BeneficiaryDetails> beneficiaryDetails;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Wallet wallet;
 	
 }
