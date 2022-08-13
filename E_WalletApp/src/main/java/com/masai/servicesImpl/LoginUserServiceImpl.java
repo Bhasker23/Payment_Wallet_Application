@@ -1,38 +1,63 @@
 package com.masai.servicesImpl;
 
+
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.LoginSignUp.CurrentSession;
+import com.masai.LoginSignUp.Login;
 import com.masai.exceptions.UserNotFindException;
 import com.masai.models.Customer;
-import com.masai.models.UserAccountDetails;
-import com.masai.repositories.RegisterUserDAL;
+import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.SaveCustomerDAL;
 import com.masai.servicesIntr.LoginUserServicIntr;
+import net.bytebuddy.utility.RandomString;
 
 @Service
 public class LoginUserServiceImpl implements LoginUserServicIntr {
 
-	@Autowired
-	private SaveCustomerDAL customerdb;
 	
 	@Autowired
-	private RegisterUserDAL userdb;
-
+	private SaveCustomerDAL customerDB;
+	
+	@Autowired
+	private CurrentSessionDAL currentUserDB;
 	
 	
 	@Override
-	public UserAccountDetails userLogin(Customer customer) {
+	public String userLogin(Login logincred) {
 		
-		if ((userdb.findById(customer.getPhone())).isEmpty()) {
+		Optional<Customer> opt = customerDB.findById(logincred.getUserid());
+		
+		
+		if (opt.isEmpty()) {throw new UserNotFindException("Please signUp First..");}
+		
+		if (!((opt.get().getPassword()).equals(logincred.getPassword()))) {
 			
-			throw new UserNotFindException("Please SignUp first..");
+			throw new UserNotFindException("Password is incorrect");
 		}
 		
-//		System.out.println(userdb.findById(customer.getPhone()).get());
+		CurrentSession currentSession = new CurrentSession();
 		
-		return (userdb.findById(customer.getPhone())).get();
+		currentSession.setName(opt.get().getName());
+		currentSession.setUserId(opt.get().getPhone());
+		
+		String uniqueID = RandomString.make(5);
+		currentSession.setUnqueid(uniqueID);
+		
+		currentUserDB.save(currentSession);
+		
+		return uniqueID;
+		
+		
+		
 	}
+	
+
+
+
+
 
 	
 }

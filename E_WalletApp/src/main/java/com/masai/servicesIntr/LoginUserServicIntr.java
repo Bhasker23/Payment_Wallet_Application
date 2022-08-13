@@ -1,9 +1,13 @@
 package com.masai.servicesIntr;
 
+import com.masai.LoginSignUp.Login;
 import com.masai.models.Customer;
 import com.masai.models.UserAccountDetails;
 
 public interface LoginUserServicIntr {
 
-	public UserAccountDetails userLogin(Customer customer);
+
+	public String userLogin(Login logincred);
+	
+	
 }
