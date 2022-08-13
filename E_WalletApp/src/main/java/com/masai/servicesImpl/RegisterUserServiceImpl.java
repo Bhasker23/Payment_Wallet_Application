@@ -1,5 +1,8 @@
 package com.masai.servicesImpl;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,46 +58,21 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    user.setCustomer(customer);
 	    
 		Wallet wallet = new Wallet();
-<<<<<<< HEAD
-		wallet.setBalance(108.1);
-//		wallet.setWalletId(1);
+
+
+
 		user.setWallet(wallet);
 		
-		Set<BankAccount> bankAccounts = new HashSet<>();
-		BankAccount bankAcc =new BankAccount(7878456, "EQIT23423", "Eqitas Finance Bank", 345680.3);
-		bankAccounts.add(bankAcc);
-		user.setBankAccounts(bankAccounts);//user will add their bank account after wallet account creation
-	    
-		Set<BeneficiaryDetails> beneficiaryDetails = new HashSet<>();
-	    //BeneficiaryDetails beneficiaryDetail = new BeneficiaryDetails("7492004935", "Satym Kumar Jha");
-	    BeneficiaryDetails beneficiaryDetail2 = new BeneficiaryDetails("8208038", "Laxmi Didi");
-		//beneficiaryDetails.add(beneficiaryDetail2);
-		beneficiaryDetails.add(beneficiaryDetail2);
-		user.setBeneficiaryDetails(beneficiaryDetails);;//user will add their beneficiary after wallet account creation
 		
-		Set<Transaction> transactions = new HashSet<>();
-=======
-		user.setWallet(wallet);
-		
->>>>>>> 3529d3b7f35a7cc463711397a90b93da2d87a0be
+
 		Transaction transaction = new Transaction();
 		BankAccount bankAcc = new BankAccount();
 		
-<<<<<<< HEAD
-//		
-		transaction.setTransationType("Charus and ganja");
-		transaction.setTransactionAmount(3456.7);
-		transaction.setDescription("Sauk badee cheej hai... Tum kiya jano raesh babu...Kabhee haveli pe aao tab batayenge...Samjhe kee Nahee...?");
-//		
-		transactions.add(transaction);
-		
-		user.setTransactions(transactions);//user will add their transactions after wallet account creation
-		 
-=======
+
 	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
 		
 
->>>>>>> 3529d3b7f35a7cc463711397a90b93da2d87a0be
+
 		customerDB.save(customer);
 		walletDB.save(wallet);
 		transactionDB.save(transaction);
