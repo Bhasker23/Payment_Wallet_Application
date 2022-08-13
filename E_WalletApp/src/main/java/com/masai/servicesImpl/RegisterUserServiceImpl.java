@@ -59,6 +59,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		
 		Transaction transaction = new Transaction();
 		BankAccount bankAcc = new BankAccount();
+		
 	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
 		
 <<<<<<< HEAD
