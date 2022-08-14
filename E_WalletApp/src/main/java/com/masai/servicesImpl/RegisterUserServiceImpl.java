@@ -17,6 +17,7 @@ import com.masai.repositories.SaveCustomerDAL;
 import com.masai.repositories.SaveTransactionDAL;
 import com.masai.repositories.SaveWalletDAL;
 import com.masai.servicesIntr.RegisterUserServiceIntr;
+import com.masai.userInput.UserInput;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
@@ -40,6 +41,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	private SaveWalletDAL walletDB;
 
 	@Override
+<<<<<<< HEAD
 	public UserAccountDetails registerUser(Customer customer) {
 
 		if ((userDB.findById(customer.getPhone())).isPresent()) {
@@ -79,4 +81,49 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 //		
 //	}
 
+=======
+	public UserAccountDetails registerUser(UserInput input) {
+		
+		if((userDB.findById(input.getPhone())).isPresent()) {
+			throw new UserAlreadyExistException("You are already SignedUp please Login.");
+			}
+		
+		Customer customer = new Customer();
+		
+		customer.setName(input.getName());
+		customer.setPhone(input.getPhone());
+		customer.setPassword(input.getPassword());
+		
+	    BankAccount bankAccount = new BankAccount();
+	    
+	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
+	    
+	    Transaction transaction = new Transaction();
+	    
+	    Wallet wallet = new Wallet();
+	    
+	    UserAccountDetails userAccountDetails = new UserAccountDetails();
+	    
+	    userAccountDetails.setId(customer.getPhone());
+	    customer.setUser(userAccountDetails);
+	    bankAccount.setUser(userAccountDetails);
+	    beneficiaryDetails.setUser(userAccountDetails);
+	    transaction.setUser(userAccountDetails);
+	    wallet.setUser(userAccountDetails);
+	    
+	    
+	    userAccountDetails.setCustomer(customer);
+	    userAccountDetails.setWallet(wallet);
+	    
+	    
+//	    customerDB.save(customer);
+//	    beneficiaryDB.save(beneficiaryDetails);
+//	    transactionDB.save(transaction);
+//	    bankaccDB.save(bankAccount);
+//	    walletDB.save(wallet);
+	    
+	   
+	   return userDB.save(userAccountDetails);
+	}
+>>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
 }
