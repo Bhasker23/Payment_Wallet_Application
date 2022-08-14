@@ -63,7 +63,7 @@ public class walletController {
 	
 	
 	
-	@GetMapping("/customer")
+	@GetMapping("/customers")
 	public List<Customer> getAllCustomer(){
 		
 		return imp.getAllCustomer(cusDep);

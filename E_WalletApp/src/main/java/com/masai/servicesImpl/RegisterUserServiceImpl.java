@@ -81,16 +81,16 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		return userDB.save(user);
 	}
 	//this method will be add in Add bank account serviceIMPL
-//	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
-//		
-//		UserAccountDetails user = (userDB.findById("67890")).get();
-//		
-//		user.getBankAccounts().add(bankAccount);
-//		
-//		userDB.save(user);
-//		
-//		return (userDB.findById("67890")).get();
-//		
-//	}
+	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
+		
+		UserAccountDetails user = (userDB.findById("8053375045")).get();
+		
+		user.getBankAccounts().add(bankAccount);
+		
+		userDB.save(user);
+		
+		return (userDB.findById("8053375045")).get();
+		
+	}
 
 }

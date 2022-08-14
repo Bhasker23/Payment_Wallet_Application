@@ -31,11 +31,11 @@ public class RegisterUserController {
 				.CREATED);
 	}
 //	//this method will be add in Add bank account controller;
-//	@PostMapping("/addBank")
-//	public UserAccountDetails addBankAccount(@RequestBody BankAccount bankAccount){
-//		
-//		 return curd.addBankAccount(bankAccount);
-//		
-//	}
-//	
+	@PostMapping("/addBank")
+	public UserAccountDetails addBankAccount(@RequestBody BankAccount bankAccount){
+		
+		 return curd.addBankAccount(bankAccount);
+		
+	}
+	
 }

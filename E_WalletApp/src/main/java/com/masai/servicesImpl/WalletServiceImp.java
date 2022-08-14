@@ -225,7 +225,15 @@ public class WalletServiceImp implements WalletServiceIntr {
 			throw new InsufficientBalance("InsufficientBalance");
 		}
 		
-		findUser.getWallet().setBalance(findUser.getWallet().getBalance()+amount);
+		if(findUser.getWallet().getBalance()==null) {
+			
+			findUser.getWallet().setBalance(amount);
+		}else {
+			
+			findUser.getWallet().setBalance(findUser.getWallet().getBalance()+amount);
+		}
+		
+		
 		
 		Transaction tr =new Transaction();
 		
