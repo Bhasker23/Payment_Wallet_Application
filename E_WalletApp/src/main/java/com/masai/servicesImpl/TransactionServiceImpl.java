@@ -1,5 +1,6 @@
 package com.masai.servicesImpl;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
+import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveTransactionDAL;
 import com.masai.servicesIntr.TransactionServiceIntr;
@@ -21,6 +23,9 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	@Autowired
 	RegisterUserDAL registerUserDAL;
 
+	@Autowired
+	private LoginDAL currentSessionDB;
+
 	@Override
 	public Transaction addTransactionService(Transaction transaction, String userid) {
 
@@ -31,19 +36,18 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	}
 
 	@Override
-	public Set<Transaction> displayAllTransactionsSevice(String userid) {
+	public Set<Transaction> displayAllTransactionsSevice(String uniqueID) {
 
-		// (registerUserDAL.findById(userid).get()).getTransactions();
-
-		return (registerUserDAL.findById(userid).get()).getTransactions();
+		return (registerUserDAL.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get())
+				.getTransactions();
 
 	}
 
 	@Override
-	public Set<Transaction> displayAllTransactionsByTypeSevice(String userId, String transactionType) {
+	public Set<Transaction> displayAllTransactionsByTypeSevice(String uniqueID, String transactionType) {
 
-		Set<Transaction> allTransactions = (registerUserDAL.findById(userId).get()).getTransactions();
-
+		Set<Transaction> allTransactions = (registerUserDAL
+				.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get()).getTransactions();
 		Set<Transaction> byTypeTransactions = new HashSet<>();
 
 		for (Transaction sTransaction : allTransactions) {
@@ -54,6 +58,34 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 
 		return byTypeTransactions;
 
+	}
+
+	@Override
+	public Set<Transaction> getTransactionsBetweenDateRangeService(String uniqueID, String from, String to) {
+
+		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		LocalDate start = LocalDate.parse(from);
+		LocalDate end = LocalDate.parse(to);
+
+		Set<Transaction> allTransactions = (registerUserDAL
+				.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get()).getTransactions();
+
+		Set<Transaction> byDateRangeTransactions = new HashSet<>();
+
+		for (Transaction transaction : allTransactions) {
+
+			String s = start.getYear() + "" + start.getMonthValue() + "" + "" + start.getDayOfMonth();
+			String e = end.getYear() + "" + end.getMonthValue() + "" + "" + end.getDayOfMonth();
+
+			// System.out.println(s.compareTo(e));
+
+			if (s.compareTo(e) <= 0 && s.compareTo(s) > 0) {
+				byDateRangeTransactions.add(transaction);
+			}
+		}
+
+		return byDateRangeTransactions;
 	}
 
 }
