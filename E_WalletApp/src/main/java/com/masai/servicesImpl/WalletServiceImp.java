@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.masai.exceptions.CustomerDoesNotExist;
 import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BankAccount;
+import com.masai.models.BeneficiaryDetails;
 import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Transaction;
@@ -58,6 +59,13 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 			throw new CustomerDoesNotExist("source user does not exist");
 		}
+		
+//		Set<BeneficiaryDetails> bdSet=sourceUser.getBeneficiaryDetails();
+//		
+//		if(!bdSet.contains(targetMobileNumber)) {
+//			
+//			throw new CustomerDoesNotExist("Target mobile number does not Beneficiary");
+//		}
 
 		UserAccountDetails targetUser = regDao.getById(targetMobileNumber);
 
