@@ -24,8 +24,8 @@ public class UserAccountDetails {
 	@JoinColumn(name = "uerId")
 	private String id;
 	
-	@OneToOne
-	@JoinColumn(name = "customerId" )
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customerId")
 	private Customer customer;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
