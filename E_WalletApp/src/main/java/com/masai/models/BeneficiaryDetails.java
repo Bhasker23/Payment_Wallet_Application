@@ -1,6 +1,8 @@
 package com.masai.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +16,6 @@ import lombok.NoArgsConstructor;
 public class BeneficiaryDetails {
 
 	@Id
-	private String phoneNumber;
-	private String name;
+	private String phoneNumber ="7008018121";
+	private String name="nasir";
 }

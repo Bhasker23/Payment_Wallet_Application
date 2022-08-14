@@ -28,12 +28,19 @@ public class UserAccountDetails {
 	@OneToOne
 	@JoinColumn(name = "customerId" )
 	private Customer customer;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BankAccount> bankAccounts;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BeneficiaryDetails> beneficiaryDetails;
+	
+//	@OneToOne(cascade = CascadeType.ALL)
+//	private BeneficiaryDetails beneficiaryDetails;
+//	
 	@OneToOne
 	private Wallet wallet;
 	

@@ -65,7 +65,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    BeneficiaryDetails beneficiaryDetail2 = new BeneficiaryDetails("8208038245", "Laxmi Didi");
 		//beneficiaryDetails.add(beneficiaryDetail2);
 		beneficiaryDetails.add(beneficiaryDetail2);
-		user.setBeneficiaryDetails(beneficiaryDetails);;//user will add their beneficiary after wallet account creation
+//		user.setBeneficiaryDetails(beneficiaryDetails);;//user will add their beneficiary after wallet account creation
 		
 		Set<Transaction> transactions = new HashSet<>();
 		Transaction transaction = new Transaction();
