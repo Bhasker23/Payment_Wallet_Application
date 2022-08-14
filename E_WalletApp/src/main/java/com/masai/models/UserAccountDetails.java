@@ -25,8 +25,8 @@ public class UserAccountDetails {
 	@JoinColumn(name = "uerId")
 	private String id;
 	
-	@OneToOne
-	@JoinColumn(name = "customerId" )
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customerId")
 	private Customer customer;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -37,11 +37,8 @@ public class UserAccountDetails {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BeneficiaryDetails> beneficiaryDetails;
-	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	private BeneficiaryDetails beneficiaryDetails;
-//	
-	@OneToOne
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private Wallet wallet;
 	
 }
