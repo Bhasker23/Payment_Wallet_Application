@@ -1,9 +1,13 @@
 package com.masai.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +24,8 @@ public class BeneficiaryDetails {
 	private Integer id;
 	private String phoneNumber;
 	private String name;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private UserAccountDetails user;
 }
