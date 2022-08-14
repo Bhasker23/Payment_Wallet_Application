@@ -22,13 +22,8 @@ public class UserAccountDetails {
 	@Id
 	@JoinColumn(name = "uerId")
 	private String id;
-<<<<<<< HEAD
 
-	@OneToOne
-=======
-	
 	@OneToOne(cascade = CascadeType.ALL)
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 	@OneToMany(cascade = CascadeType.ALL)

@@ -23,13 +23,8 @@ public class Wallet {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer walletId;
 	private Double balance;
-<<<<<<< HEAD
 
-=======
-	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private UserAccountDetails user;
-	
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
 }

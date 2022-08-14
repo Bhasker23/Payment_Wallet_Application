@@ -24,12 +24,9 @@ public class BeneficiaryDetails {
 	private Integer id;
 	private String phoneNumber;
 	private String name;
-<<<<<<< HEAD
 
-=======
-	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private UserAccountDetails user;
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
+
 }

@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentSession {
-
 	@Id
+	private String uniqueId;
 	private String userId;
 	private String name;
-	private String unqueid;
 }

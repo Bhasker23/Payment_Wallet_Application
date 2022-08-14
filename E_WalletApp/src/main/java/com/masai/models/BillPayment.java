@@ -1,6 +1,8 @@
 package com.masai.models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -14,15 +16,12 @@ import lombok.NoArgsConstructor;
 public class BillPayment {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer billId;
-	private Wallet wallet;
-	private Double billBmount;
+	private Double billAmount;
 	private String billType;
-<<<<<<< HEAD
 
-=======
-	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserAccountDetails user;
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
+
 }

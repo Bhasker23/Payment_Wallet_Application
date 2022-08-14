@@ -41,89 +41,44 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	private SaveWalletDAL walletDB;
 
 	@Override
-<<<<<<< HEAD
-	public UserAccountDetails registerUser(Customer customer) {
+	public UserAccountDetails registerUser(UserInput input) {
 
-		if ((userDB.findById(customer.getPhone())).isPresent()) {
+		if ((userDB.findById(input.getPhone())).isPresent()) {
 			throw new UserAlreadyExistException("You are already SignedUp please Login.");
 		}
 
-		UserAccountDetails user = new UserAccountDetails();
-
-		user.setId(customer.getPhone());
-		user.setCustomer(customer);
-
-		Wallet wallet = new Wallet();
-		user.setWallet(wallet);
-
-		Transaction transaction = new Transaction();
-		BankAccount bankAcc = new BankAccount();
-
-		BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
-
-		customerDB.save(customer);
-		walletDB.save(wallet);
-		transactionDB.save(transaction);
-		bankaccDB.save(bankAcc);
-		beneficiaryDB.save(beniBeneficiaryDetail);
-		return userDB.save(user);
-	}
-	// this method will be add in Add bank account serviceIMPL
-//	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
-//		
-//		UserAccountDetails user = (userDB.findById("67890")).get();
-//		
-//		user.getBankAccounts().add(bankAccount);
-//		
-//		userDB.save(user);
-//		
-//		return (userDB.findById("67890")).get();
-//		
-//	}
-
-=======
-	public UserAccountDetails registerUser(UserInput input) {
-		
-		if((userDB.findById(input.getPhone())).isPresent()) {
-			throw new UserAlreadyExistException("You are already SignedUp please Login.");
-			}
-		
 		Customer customer = new Customer();
-		
+
 		customer.setName(input.getName());
 		customer.setPhone(input.getPhone());
 		customer.setPassword(input.getPassword());
-		
-	    BankAccount bankAccount = new BankAccount();
-	    
-	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
-	    
-	    Transaction transaction = new Transaction();
-	    
-	    Wallet wallet = new Wallet();
-	    
-	    UserAccountDetails userAccountDetails = new UserAccountDetails();
-	    
-	    userAccountDetails.setId(customer.getPhone());
-	    customer.setUser(userAccountDetails);
-	    bankAccount.setUser(userAccountDetails);
-	    beneficiaryDetails.setUser(userAccountDetails);
-	    transaction.setUser(userAccountDetails);
-	    wallet.setUser(userAccountDetails);
-	    
-	    
-	    userAccountDetails.setCustomer(customer);
-	    userAccountDetails.setWallet(wallet);
-	    
-	    
+
+		BankAccount bankAccount = new BankAccount();
+
+		BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
+
+		Transaction transaction = new Transaction();
+
+		Wallet wallet = new Wallet();
+
+		UserAccountDetails userAccountDetails = new UserAccountDetails();
+
+		userAccountDetails.setId(customer.getPhone());
+		customer.setUser(userAccountDetails);
+		bankAccount.setUser(userAccountDetails);
+		beneficiaryDetails.setUser(userAccountDetails);
+		transaction.setUser(userAccountDetails);
+		wallet.setUser(userAccountDetails);
+
+		userAccountDetails.setCustomer(customer);
+		userAccountDetails.setWallet(wallet);
+
 //	    customerDB.save(customer);
 //	    beneficiaryDB.save(beneficiaryDetails);
 //	    transactionDB.save(transaction);
 //	    bankaccDB.save(bankAccount);
 //	    walletDB.save(wallet);
-	    
-	   
-	   return userDB.save(userAccountDetails);
+
+		return userDB.save(userAccountDetails);
 	}
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
 }
