@@ -44,7 +44,7 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 		currentSession.setUserId(opt.get().getPhone());
 		
 		String uniqueID = RandomString.make(5);
-		currentSession.setUniqueId(uniqueID);
+		currentSession.setUniqueid(uniqueID);
 		
 		currentUserDB.save(currentSession);
 		

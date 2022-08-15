@@ -17,6 +17,7 @@ import com.masai.repositories.SaveCustomerDAL;
 import com.masai.repositories.SaveTransactionDAL;
 import com.masai.repositories.SaveWalletDAL;
 import com.masai.servicesIntr.RegisterUserServiceIntr;
+import com.masai.userInput.UserInput;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
@@ -41,46 +42,35 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	
 
 	@Override
-	public UserAccountDetails registerUser(Customer customer) {
+	public UserAccountDetails registerUser(UserInput input) {
 		
-		if((userDB.findById(customer.getPhone())).isPresent()) {
+		if((userDB.findById(input.getPhone())).isPresent()) {
 			throw new UserAlreadyExistException("You are already SignedUp please Login.");
 			}
 		
+		Customer customer = new Customer();
 		
-		UserAccountDetails user = new UserAccountDetails();
+		customer.setName(input.getName());
+		customer.setPhone(input.getPhone());
+		customer.setPassword(input.getPassword());
 		
-		
-		user.setId(customer.getPhone());
-	    user.setCustomer(customer);
+	    BankAccount bankAccount = new BankAccount();
 	    
-		Wallet wallet = new Wallet();
-		user.setWallet(wallet);
-		
-		Transaction transaction = new Transaction();
-		BankAccount bankAcc = new BankAccount();
-		
-	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
-		
-
-		customerDB.save(customer);
-		walletDB.save(wallet);
-		transactionDB.save(transaction);
-		bankaccDB.save(bankAcc);
-		beneficiaryDB.save(beniBeneficiaryDetail);
-		return userDB.save(user);
+	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
+	    
+	    Transaction transaction = new Transaction();
+	    
+	    Wallet wallet = new Wallet();
+	    
+	    UserAccountDetails userAccountDetails = new UserAccountDetails();
+	    
+	    userAccountDetails.setId(customer.getPhone());
+	    userAccountDetails.setCustomer(customer);
+	    userAccountDetails.setWallet(wallet);
+        
+	    wallet.setUser(userAccountDetails);
+	    customer.setUser(userAccountDetails);
+	    
+	   return userDB.save(userAccountDetails);
 	}
-	//this method will be add in Add bank account serviceIMPL
-//	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
-//		
-//		UserAccountDetails user = (userDB.findById("67890")).get();
-//		
-//		user.getBankAccounts().add(bankAccount);
-//		
-//		userDB.save(user);
-//		
-//		return (userDB.findById("67890")).get();
-//		
-//	}
-
 }
