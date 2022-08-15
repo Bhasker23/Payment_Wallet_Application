@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 public class CurrentSession  {
 
 	@Id
+	private String uniqueId;
 	private String userId;
 	private String name;
-	private String unqueid;
+	
 }
