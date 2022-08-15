@@ -1,6 +1,7 @@
 package com.masai.servicesIntr;
 
 import java.util.List;
+import java.util.Set;
 
 import com.masai.exceptions.BeneficiaryNotFound;
 import com.masai.exceptions.InvalidBeneficiaryDetails;
@@ -11,13 +12,14 @@ public interface BenificiaryDetailsServiceIntr{
 	
 	
 
-	public BeneficiaryDetails saveBeneficiaryDetails(BeneficiaryDetails beneficiaryDetails);
+	public BeneficiaryDetails saveBeneficiaryDetails(BeneficiaryDetails beneficiaryDetails, String uniqueId);
 	
-	public BeneficiaryDetails getBeneficiaryDetails(String id) throws BeneficiaryNotFound;
+	public BeneficiaryDetails getBeneficiaryDetails(String id,String uniqueId) throws BeneficiaryNotFound;
 	
-	public List<BeneficiaryDetails> getAllBeneficiaryDetails() throws BeneficiaryNotFound;
+	public Set<BeneficiaryDetails> getAllBeneficiaryDetails(String uniqueId) throws BeneficiaryNotFound;
 	
-	public String  deleteBeneficiaryDetails(String id)throws InvalidBeneficiaryDetails;
+	public String  deleteBeneficiaryDetails(String id,String uniqueId)throws InvalidBeneficiaryDetails;
+	
 	
 	
 	

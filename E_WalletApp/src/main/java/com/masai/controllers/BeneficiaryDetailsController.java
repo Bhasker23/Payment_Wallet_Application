@@ -1,6 +1,7 @@
 package com.masai.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class BeneficiaryDetailsController {
 	@Autowired
 	private BenificiaryDetailsServiceIntr benDetSerIntr;
 	
-	
+	 
 	/*postMaping
 	 * 
 	 * http://localhost:8080/Beneficiaries
@@ -43,14 +44,14 @@ public class BeneficiaryDetailsController {
 				}
 	 */
 	//save 
-	@PostMapping(value="/Beneficiaries")
-	public ResponseEntity<BeneficiaryDetails> saveBeneficiaryHandler(@RequestBody BeneficiaryDetails beneficiaryDetails){
+	@PostMapping(value="/Beneficiaries/{uniqueId}")
+	public ResponseEntity<BeneficiaryDetails> saveBeneficiaryHandler(@RequestBody BeneficiaryDetails beneficiaryDetails,@PathVariable String uniqueId){
 		
 //		UserAccountDetails uad= new UserAccountDetails();
 //		uad.setBeneficiaryDetails(beneficiaryDetails);
 		
 		
-		return new ResponseEntity<BeneficiaryDetails>(benDetSerIntr.saveBeneficiaryDetails(beneficiaryDetails), HttpStatus.CREATED);
+		return new ResponseEntity<BeneficiaryDetails>(benDetSerIntr.saveBeneficiaryDetails(beneficiaryDetails,uniqueId), HttpStatus.CREATED);
 	}
 	
 	
@@ -60,11 +61,11 @@ public class BeneficiaryDetailsController {
 	 * http://localhost:8080/Beneficiary/123
 	 * */
 	//get by id
-	@GetMapping(value="/Beneficiary/{id}")
-	public ResponseEntity<BeneficiaryDetails> getBeneficiaryDetailsByIdHandler(@PathVariable("id") String id){
+	@GetMapping(value="/Beneficiary/{id}/{uniqueId}")
+	public ResponseEntity<BeneficiaryDetails> getBeneficiaryDetailsByIdHandler(@PathVariable("id") String id,@PathVariable String uniqueId){
 		
 		
-		return new ResponseEntity<BeneficiaryDetails>(benDetSerIntr.getBeneficiaryDetails(id), HttpStatus.OK);
+		return new ResponseEntity<BeneficiaryDetails>(benDetSerIntr.getBeneficiaryDetails(id,uniqueId), HttpStatus.OK);
 		
 	}
 	
@@ -75,21 +76,21 @@ public class BeneficiaryDetailsController {
 	 * http://localhost:8080/Beneficiaries
 	 */
 	//get all
-	@GetMapping(value=("/Beneficiaries"))
-	public List<BeneficiaryDetails> getAllBeneficiaryDetailsHandler(){
+	@GetMapping(value=("/Beneficiaries/{uniqueId}"))
+	public Set<BeneficiaryDetails> getAllBeneficiaryDetailsHandler(@PathVariable String uniqueId){
 		
-		return benDetSerIntr.getAllBeneficiaryDetails();
+		return benDetSerIntr.getAllBeneficiaryDetails(uniqueId);
 	}
 	
 	
 	
 	//delete by id
-	@DeleteMapping("/Beneficiaries/{id}")
-	public ResponseEntity<String> deleteByIdHandler(@PathVariable("id") String id){
+	@DeleteMapping("/Beneficiaries/{id}/{uniqueId}")
+	public ResponseEntity<String> deleteByIdHandler(@PathVariable("id") String id,@PathVariable String uniqueId){
 		
-		benDetSerIntr.deleteBeneficiaryDetails(id);
+		benDetSerIntr.deleteBeneficiaryDetails(id,uniqueId);
 		
-		return new ResponseEntity<String>("deleted ", HttpStatus.OK);
+		return new ResponseEntity<String>(id +" deleted ", HttpStatus.OK);
 	}
 	
 	
