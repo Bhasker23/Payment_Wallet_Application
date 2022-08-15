@@ -40,11 +40,13 @@ public class UserAccountDetails {
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 
+
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BankAccount> bankAccounts;
+
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BeneficiaryDetails> beneficiaryDetails;

@@ -58,6 +58,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    
 	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
 	    
+
 	    Transaction transaction = new Transaction();
 	    
 	    Wallet wallet = new Wallet();

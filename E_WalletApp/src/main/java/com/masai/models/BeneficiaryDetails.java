@@ -20,9 +20,10 @@ import lombok.NoArgsConstructor;
 public class BeneficiaryDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+//	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String phoneNumber;
+//	private Integer id;
+	
 	private String name;
 
 	@ManyToOne(cascade = CascadeType.ALL)

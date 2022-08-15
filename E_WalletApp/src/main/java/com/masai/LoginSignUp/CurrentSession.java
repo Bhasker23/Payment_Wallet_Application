@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentSession {
+	
 	@Id
 	private String uniqueid;
 	private String userId;
 	private String name;
 	
+
 
 }

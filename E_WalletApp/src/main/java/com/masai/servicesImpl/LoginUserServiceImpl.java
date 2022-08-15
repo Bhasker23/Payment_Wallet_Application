@@ -66,17 +66,5 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	}
 
 
-	
-	
-
-
-		String uniqueID = RandomString.make(5);
-		currentSession.setUniqueId(uniqueID);
-
-		currentUserDB.save(currentSession);
-
-		return uniqueID;
-
-	}
 
 }
