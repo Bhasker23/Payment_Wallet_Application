@@ -35,15 +35,5 @@ public class RegisterUserController {
 		return new ResponseEntity<>(savedCustomer,HttpStatus
 				.CREATED);
 	}
-<<<<<<< HEAD
-//	//this method will be add in Add bank account controller;
-	@PostMapping("/addBank")
-	public UserAccountDetails addBankAccount(@RequestBody BankAccount bankAccount){
-		
-		 return curd.addBankAccount(bankAccount);
-		
-	}
-	
-=======
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
+
 }

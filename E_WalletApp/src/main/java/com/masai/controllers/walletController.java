@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Wallet;
+import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
 import com.masai.servicesImpl.WalletServiceImp;
@@ -28,61 +29,64 @@ public class walletController {
 	@Autowired
 	WalletServiceImp imp;
 	
+	@Autowired
+	CurrentSessionDAL csDal;
+	
 	
 	
 	
 
-	@GetMapping("/balance/{mobileNumber}")
-	public CoustomerWithWallet showBalance(@PathVariable String mobileNumber) {
+	@GetMapping("/balance/{unqId}")
+	public CoustomerWithWallet showBalance(@PathVariable String unqId) {
 
 		System.out.println(regDao);
 
-		return imp.showBalanceByPhoneNumber(mobileNumber,regDao);
+		return imp.showBalanceInWallet(regDao, csDal,unqId);
 	}
 	
 	
 	
 	
 	
-	@PutMapping("/fundTransfer/{sNumber}/{tNumber}/{amount}")
-	public Wallet fundTf(@PathVariable String sNumber,@PathVariable String tNumber, @PathVariable double amount) {
+	@PutMapping("/fundTransfer/{tNumber}/{amount}/{unqId}")
+	public Wallet fundTf(@PathVariable String tNumber, @PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.fundTransfer(sNumber, tNumber, amount, regDao);
+		return imp.fundTransferFromOneWalletToOtherWallet( tNumber, amount, regDao, csDal, unqId);
 	}
 	
 	
 	
 	
 	
-	@PutMapping("/depositAmount/{pNumber}/{amount}")
-	public CoustomerWithWallet depositAmountInWallet(@PathVariable String pNumber,@PathVariable double amount) {
+	@PutMapping("/depositAmount/{amount}/{unqId}")
+	public CoustomerWithWallet depositAmountInWallet(@PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.depostAmount(pNumber, amount, regDao);
+		return imp.depostAmountFromWalletToBankAccount(amount, regDao, csDal, unqId);
 	}
 	
 	
 	
 	
-	@GetMapping("/customers")
-	public List<Customer> getAllCustomer(){
+	@GetMapping("/customers/{unqId}")
+	public List<Customer> getAllCustomer(@PathVariable String unqId){
 		
-		return imp.getAllCustomer(cusDep);
+		return imp.getAllCustomer(cusDep, csDal, unqId);
 	}
 	
 	
 	
 	
-	@PutMapping("/customer")
-	public Customer updateCustomer(@RequestBody Customer cus) {
+	@PutMapping("/updateCustomer/{unqId}")
+	public Customer updateCustomer(@RequestBody Customer cus,@PathVariable String unqId) {
 		
-		return imp.updateCust(cus, regDao);
+		return imp.updateCustomer(cus, regDao, csDal, unqId);
 	}
 	
 	
-	@PutMapping("/addMoney/{amount}")
-	public CoustomerWithWallet addMoneyIntoWallet(@RequestBody Wallet wal,@PathVariable double amount) {
+	@PutMapping("/addMoney/{amount}/{unqId}")
+	public CoustomerWithWallet addMoneyIntoWallet(@PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.addMoneyIntoWallet(wal, amount, regDao);
+		return imp.addMoneyIntoWalletFromBankAccount(amount, regDao, csDal, unqId);
 	}
 	
 }

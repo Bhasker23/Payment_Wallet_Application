@@ -1,8 +1,5 @@
 package com.masai.servicesImpl;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,44 +56,6 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		
 	    BankAccount bankAccount = new BankAccount();
 	    
-<<<<<<< HEAD
-		Wallet wallet = new Wallet();
-
-
-
-		user.setWallet(wallet);
-		
-		
-
-		Transaction transaction = new Transaction();
-		BankAccount bankAcc = new BankAccount();
-		
-
-	    BeneficiaryDetails beniBeneficiaryDetail = new BeneficiaryDetails();
-		
-
-
-		customerDB.save(customer);
-		walletDB.save(wallet);
-		transactionDB.save(transaction);
-		bankaccDB.save(bankAcc);
-		beneficiaryDB.save(beniBeneficiaryDetail);
-		return userDB.save(user);
-	}
-	//this method will be add in Add bank account serviceIMPL
-	public UserAccountDetails addBankAccount(BankAccount bankAccount) {
-		
-		UserAccountDetails user = (userDB.findById("8053375045")).get();
-		
-		user.getBankAccounts().add(bankAccount);
-		
-		userDB.save(user);
-		
-		return (userDB.findById("8053375045")).get();
-		
-	}
-
-=======
 	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
 	    
 	    Transaction transaction = new Transaction();
@@ -126,5 +85,4 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	   
 	   return userDB.save(userAccountDetails);
 	}
->>>>>>> e5f0c02c5f3b88a56c1b4a41b28995bde9827e42
 }
