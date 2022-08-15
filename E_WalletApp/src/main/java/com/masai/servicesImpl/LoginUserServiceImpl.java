@@ -43,6 +43,33 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 		currentSession.setName(opt.get().getName());
 		currentSession.setUserId(opt.get().getPhone());
 
+		
+		String uniqueID = RandomString.make(5);
+		currentSession.setUniqueid(uniqueID);
+		
+		currentUserDB.save(currentSession);
+		
+		return uniqueID;
+		
+	}
+
+
+	@Override
+	public String logOutUser( String uniqueId) {
+		
+	 String name = (currentUserDB.findById(uniqueId).get()).getName();
+	
+	  currentUserDB.deleteById(uniqueId);
+		
+	  return name + " has been loged out.";
+	  
+	}
+
+
+	
+	
+
+
 		String uniqueID = RandomString.make(5);
 		currentSession.setUniqueId(uniqueID);
 

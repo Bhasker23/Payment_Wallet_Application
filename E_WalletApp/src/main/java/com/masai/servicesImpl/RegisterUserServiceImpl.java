@@ -53,32 +53,25 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		customer.setPhone(input.getPhone());
 		customer.setPassword(input.getPassword());
 
-		BankAccount bankAccount = new BankAccount();
+		
+	    BankAccount bankAccount = new BankAccount();
+	    
+	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
+	    
+	    Transaction transaction = new Transaction();
+	    
+	    Wallet wallet = new Wallet();
+	    
+	    UserAccountDetails userAccountDetails = new UserAccountDetails();
+	    
+	    userAccountDetails.setId(customer.getPhone());
+	    userAccountDetails.setCustomer(customer);
+	    userAccountDetails.setWallet(wallet);
+        
+	    wallet.setUser(userAccountDetails);
+	    customer.setUser(userAccountDetails);
+	    
+	   return userDB.save(userAccountDetails);
 
-		BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
-
-		Transaction transaction = new Transaction();
-
-		Wallet wallet = new Wallet();
-
-		UserAccountDetails userAccountDetails = new UserAccountDetails();
-
-		userAccountDetails.setId(customer.getPhone());
-		customer.setUser(userAccountDetails);
-		bankAccount.setUser(userAccountDetails);
-		beneficiaryDetails.setUser(userAccountDetails);
-		transaction.setUser(userAccountDetails);
-		wallet.setUser(userAccountDetails);
-
-		userAccountDetails.setCustomer(customer);
-		userAccountDetails.setWallet(wallet);
-
-//	    customerDB.save(customer);
-//	    beneficiaryDB.save(beneficiaryDetails);
-//	    transactionDB.save(transaction);
-//	    bankaccDB.save(bankAccount);
-//	    walletDB.save(wallet);
-
-		return userDB.save(userAccountDetails);
 	}
 }
