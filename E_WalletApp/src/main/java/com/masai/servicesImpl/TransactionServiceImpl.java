@@ -18,31 +18,43 @@ import com.masai.servicesIntr.TransactionServiceIntr;
 public class TransactionServiceImpl implements TransactionServiceIntr {
 
 	@Autowired
-	SaveTransactionDAL saveTransactionDAL;
+	private SaveTransactionDAL saveTransactionDAL;
 
 	@Autowired
-	RegisterUserDAL registerUserDAL;
+	private RegisterUserDAL registerUserDAL;
 
 	@Autowired
 	private LoginDAL currentSessionDB;
+	// ==========================================================================================
 
 	@Override
 	public Transaction addTransactionService(Transaction transaction, String userid) {
 
 		UserAccountDetails users = registerUserDAL.findById(userid).get();
+		//
+//		UserAccountDetails user1 = new UserAccountDetails();
+//		user1.setId(userid);
+		// transaction.setUser(users);
+
 		users.getTransactions().add(transaction);
+
 		registerUserDAL.save(users);
 		return transaction;
 	}
 
+//==========================================================================================
 	@Override
 	public Set<Transaction> displayAllTransactionsSevice(String uniqueID) {
 
-		return (registerUserDAL.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get())
-				.getTransactions();
+		System.out.println(uniqueID);
 
+		UserAccountDetails user = registerUserDAL.findById((currentSessionDB.findById(uniqueID).get()).getUserId())
+				.get();
+
+		return user.getTransactions();
 	}
 
+//===================================================================================
 	@Override
 	public Set<Transaction> displayAllTransactionsByTypeSevice(String uniqueID, String transactionType) {
 
@@ -59,6 +71,7 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 		return byTypeTransactions;
 
 	}
+	// ==========================================================================================
 
 	@Override
 	public Set<Transaction> getTransactionsBetweenDateRangeService(String uniqueID, String from, String to) {
@@ -87,5 +100,7 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 
 		return byDateRangeTransactions;
 	}
+
+	// ==========================================================================================
 
 }

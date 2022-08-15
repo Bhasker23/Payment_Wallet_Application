@@ -18,7 +18,6 @@ import lombok.Data;
 public class Transaction {
 
 	@Id
-
 	private Integer transactionId;
 	private String transationType;
 	private LocalDateTime localDateTime;

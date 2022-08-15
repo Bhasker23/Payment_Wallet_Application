@@ -24,6 +24,7 @@ public class TranscationController {
 		return transactionServiceImpl.addTransactionService(transaction, userId);
 
 	}
+	// =============================================================================================
 
 	@GetMapping("/transaction_History/{uniqueId}")
 	public Set<Transaction> getAllTransactionsHistory(@PathVariable String uniqueId) {
@@ -32,6 +33,7 @@ public class TranscationController {
 
 	}
 
+//=============================================================================================
 	@GetMapping("/transaction_History/{uniqueId}/{typeOftransaction}")
 	public Set<Transaction> getAllTransactionsHistoryByType(@PathVariable String uniqueId,
 			@PathVariable String typeOftransaction) {
@@ -39,6 +41,7 @@ public class TranscationController {
 		return transactionServiceImpl.displayAllTransactionsByTypeSevice(uniqueId, typeOftransaction);
 
 	}
+	// =============================================================================================
 
 	@GetMapping("/transactionsBetweenDateRange/{uniqueId}")
 	public Set<Transaction> getTransactionsBetweenDateRangeService(@PathVariable String uniqueId,
