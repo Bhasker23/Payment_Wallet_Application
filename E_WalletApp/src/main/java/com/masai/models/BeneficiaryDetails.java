@@ -20,12 +20,14 @@ import lombok.NoArgsConstructor;
 public class BeneficiaryDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+//	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String phoneNumber;
-	private String name;
+//	private Integer id;
 	
+	private String name;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private UserAccountDetails user;
+
 }
