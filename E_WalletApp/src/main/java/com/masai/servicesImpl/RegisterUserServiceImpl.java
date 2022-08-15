@@ -24,35 +24,35 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 	@Autowired
 	private RegisterUserDAL userDB;
-	
+
 	@Autowired
 	private SaveCustomerDAL customerDB;
-	
+
 	@Autowired
 	private SaveBankAccDAL bankaccDB;
-	
+
 	@Autowired
 	private SaveBeneficiaryDAL beneficiaryDB;
-	
+
 	@Autowired
 	private SaveTransactionDAL transactionDB;
-	
+
 	@Autowired
 	private SaveWalletDAL walletDB;
-	
 
 	@Override
 	public UserAccountDetails registerUser(UserInput input) {
-		
-		if((userDB.findById(input.getPhone())).isPresent()) {
+
+		if ((userDB.findById(input.getPhone())).isPresent()) {
 			throw new UserAlreadyExistException("You are already SignedUp please Login.");
-			}
-		
+		}
+
 		Customer customer = new Customer();
-		
+
 		customer.setName(input.getName());
 		customer.setPhone(input.getPhone());
 		customer.setPassword(input.getPassword());
+
 		
 	    BankAccount bankAccount = new BankAccount();
 	    
@@ -66,24 +66,12 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    UserAccountDetails userAccountDetails = new UserAccountDetails();
 	    
 	    userAccountDetails.setId(customer.getPhone());
-	    customer.setUser(userAccountDetails);
-	    bankAccount.setUser(userAccountDetails);
-	    beneficiaryDetails.setUser(userAccountDetails);
-	    transaction.setUser(userAccountDetails);
-	    wallet.setUser(userAccountDetails);
-	    
-	    
 	    userAccountDetails.setCustomer(customer);
 	    userAccountDetails.setWallet(wallet);
+        
+	    wallet.setUser(userAccountDetails);
+	    customer.setUser(userAccountDetails);
 	    
-	    
-//	    customerDB.save(customer);
-//	    beneficiaryDB.save(beneficiaryDetails);
-//	    transactionDB.save(transaction);
-//	    bankaccDB.save(bankAccount);
-//	    walletDB.save(wallet);
-	    
-	   
 	   return userDB.save(userAccountDetails);
 
 	}

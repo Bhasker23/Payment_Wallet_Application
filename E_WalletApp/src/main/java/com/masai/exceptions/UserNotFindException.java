@@ -1,6 +1,6 @@
 package com.masai.exceptions;
 
-public class UserNotFindException extends RuntimeException{
+public class UserNotFindException extends RuntimeException {
 
 	public UserNotFindException() {
 		// TODO Auto-generated constructor stub
@@ -10,6 +10,5 @@ public class UserNotFindException extends RuntimeException{
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
 }
