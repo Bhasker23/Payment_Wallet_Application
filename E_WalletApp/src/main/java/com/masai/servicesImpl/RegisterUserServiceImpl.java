@@ -65,24 +65,12 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	    UserAccountDetails userAccountDetails = new UserAccountDetails();
 	    
 	    userAccountDetails.setId(customer.getPhone());
-	    customer.setUser(userAccountDetails);
-	    bankAccount.setUser(userAccountDetails);
-	    beneficiaryDetails.setUser(userAccountDetails);
-	    transaction.setUser(userAccountDetails);
-	    wallet.setUser(userAccountDetails);
-	    
-	    
 	    userAccountDetails.setCustomer(customer);
 	    userAccountDetails.setWallet(wallet);
+        
+	    wallet.setUser(userAccountDetails);
+	    customer.setUser(userAccountDetails);
 	    
-	    
-//	    customerDB.save(customer);
-//	    beneficiaryDB.save(beneficiaryDetails);
-//	    transactionDB.save(transaction);
-//	    bankaccDB.save(bankAccount);
-//	    walletDB.save(wallet);
-	    
-	   
 	   return userDB.save(userAccountDetails);
 	}
 }

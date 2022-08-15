@@ -11,14 +11,23 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.ForeignKey;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Entity
-@Data
-@NoArgsConstructor
+@Setter
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Entity
 public class UserAccountDetails {
 	
 	@Id
