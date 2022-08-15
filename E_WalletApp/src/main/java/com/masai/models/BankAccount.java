@@ -26,7 +26,7 @@ import lombok.ToString;
 @Entity
 @EqualsAndHashCode
 public class BankAccount {
-	
+
 	@Id
 	private Integer accountNumber;
 	private String ifscCode;

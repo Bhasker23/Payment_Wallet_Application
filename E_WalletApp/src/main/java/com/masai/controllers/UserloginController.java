@@ -19,15 +19,15 @@ public class UserloginController {
 
 	@Autowired
 	private LoginUserServiceImpl curd;
-	
-	
 
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser(@RequestBody Login login){
 		
+
 		return new ResponseEntity<>(curd.userLogin(login), HttpStatus.OK);
-		
+
 	}
+
 	
 	@DeleteMapping("/logout/{uniqueId}")
 	public ResponseEntity<String> logOutUser(@PathVariable String uniqueId ){
@@ -35,4 +35,5 @@ public class UserloginController {
 		return new ResponseEntity<>(curd.logOutUser(uniqueId) , HttpStatus.OK); 
 	}
 	
+
 }
