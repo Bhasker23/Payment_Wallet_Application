@@ -31,10 +31,6 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	public Transaction addTransactionService(Transaction transaction, String userid) {
 
 		UserAccountDetails users = registerUserDAL.findById(userid).get();
-		//
-//		UserAccountDetails user1 = new UserAccountDetails();
-//		user1.setId(userid);
-		// transaction.setUser(users);
 
 		users.getTransactions().add(transaction);
 
@@ -45,8 +41,6 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 //==========================================================================================
 	@Override
 	public Set<Transaction> displayAllTransactionsSevice(String uniqueID) {
-
-		System.out.println(uniqueID);
 
 		UserAccountDetails user = registerUserDAL.findById((currentSessionDB.findById(uniqueID).get()).getUserId())
 				.get();
@@ -60,6 +54,7 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 
 		Set<Transaction> allTransactions = (registerUserDAL
 				.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get()).getTransactions();
+
 		Set<Transaction> byTypeTransactions = new HashSet<>();
 
 		for (Transaction sTransaction : allTransactions) {
@@ -75,8 +70,6 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 
 	@Override
 	public Set<Transaction> getTransactionsBetweenDateRangeService(String uniqueID, String from, String to) {
-
-		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		LocalDate start = LocalDate.parse(from);
 		LocalDate end = LocalDate.parse(to);

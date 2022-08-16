@@ -14,9 +14,7 @@ import com.masai.exceptions.ExceptionDetails;
 import com.masai.exceptions.NotAnyBankAddedYet;
 import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.exceptions.UserInputInvalidException;
-
-import com.masai.exceptions.UserNotLogedinException;
-
+import com.masai.exceptions.UserNotFindException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -52,10 +50,8 @@ public class GlobalExceptionHandler {
 		exceptionDetails.setLocalDate(LocalDate.now());
 		exceptionDetails.setDescription(wr.getDescription(false));
 
-
 		return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
 	}
-
 
 	@ExceptionHandler(NotAnyBankAddedYet.class)
 	public ResponseEntity<ExceptionDetails> userAccountNotExsis(BankAccountNotExsists ex, WebRequest wr) {
@@ -79,7 +75,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
 
 	}
-
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr) {
