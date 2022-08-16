@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.BillPayment;
+import com.masai.models.ViewBill;
 import com.masai.models.Wallet;
 import com.masai.servicesIntr.BillPaymentIntr;
 
@@ -21,20 +22,20 @@ public class BillPaymentController {
 	@Autowired
 	private BillPaymentIntr billService;
 	
-	@PostMapping("/bill")
-	public ResponseEntity<BillPayment> saveBillPayment(@RequestBody BillPayment billPayment) {
+	@PostMapping("/bill/{uniqId}")
+	public ResponseEntity<ViewBill> saveBillPayment(@PathVariable("uniqId") String uniqId, @RequestBody BillPayment billPayment) {
 		
-		BillPayment bill= billService.addBillPayment(billPayment);
+		ViewBill bill= billService.addBillPayment(billPayment, uniqId);
 		
-		return new ResponseEntity<BillPayment>(bill, HttpStatus.OK);
+		return new ResponseEntity<ViewBill>(bill, HttpStatus.OK);
 	}
 	
-	@GetMapping("/viewBill/{walletId}")
-	public ResponseEntity<List<BillPayment>> viewBillPayment(@PathVariable Integer walletId){
+	@GetMapping("/viewBill/{uniqId}")
+	public ResponseEntity<List<ViewBill>> viewBillPayment(@PathVariable("uniqId") String uniqId){
 		
-		List<BillPayment> billPayment = billService.viewBillPayment(walletId);
+		List<ViewBill > billPayment = billService.viewBillPayment(uniqId);
 		
-		return new ResponseEntity<List<BillPayment>>(billPayment, HttpStatus.OK);
+		return new ResponseEntity<List<ViewBill>>(billPayment, HttpStatus.OK);
 		
 	}
 	
