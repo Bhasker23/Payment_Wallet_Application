@@ -1,53 +1,103 @@
 package com.masai.servicesImpl;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.controllers.TranscationController;
-import com.masai.exceptions.UserNotFindException;
+import com.masai.LoginSignUp.CurrentSession;
+import com.masai.exceptions.BillPaymentException;
+import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BillPayment;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
-import com.masai.repositories.LoginDAL;
+import com.masai.models.ViewBill;
+import com.masai.models.Wallet;
+import com.masai.repositories.BillPaymentDAO;
+import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
+import com.masai.repositories.SaveWalletDAL;
+
 import com.masai.servicesIntr.BillPaymentIntr;
 
 @Service
 public class BillPaymentImpl implements BillPaymentIntr {
 
 	@Autowired
-	private LoginDAL currentSessionDB;
+	private BillPaymentDAO bDao;
 
 	@Autowired
-	private RegisterUserDAL userDB;
+	private RegisterUserDAL rDao;
 
 	@Autowired
-	private TranscationController saveTransaction;
+	private SaveWalletDAL wDao;
 
+	@Autowired
+	private CurrentSessionDAL curDao;
+
+	@Autowired
+	private TransactionServiceImpl saveTransaction;
+	
 	@Override
-	public Transaction payBill(BillPayment bill, String uid) {
+	public BillPayment addBillPayment(BillPayment billPayment, String uniqId) {
 
-		UserAccountDetails user = (userDB.findById((currentSessionDB.findById(uid).get()).getUserId())).get();
+		UserAccountDetails user = rDao.findById((curDao.findById(uniqId).get()).getUserId()).get();
 
 		if (user == null) {
-			throw new UserNotFindException("please Login first...");
+			throw new BillPaymentException("first you have to login..");
+		}
+		
+		if(user.getWallet().getBalance()<billPayment.getBillAmount()||user.getWallet().getBalance()==null) {
+			throw new InsufficientBalance("Insufficent Balance in Wallet");
 		}
 
+		BillPayment billPayment2 = new BillPayment();
+		billPayment2.setBillAmount(billPayment.getBillAmount());
+		billPayment2.setBillId(billPayment.getBillId());
+		billPayment2.setBillType(billPayment.getBillType());
+		billPayment2.setUser(user);
+
+		
+		
 		Transaction transaction = new Transaction();
-
-		Random random = new Random();
-
-		transaction.setTransactionId(Math.abs(random.nextInt() + 8769797));
-
-//		transaction.setDescription(bill.getBillType() + " bill of amount " + bill.getBillAmount() + " " + " paid on "
-//				+ transaction.getLocalDateTime());
-		transaction.setDescription("bill paid");
-		transaction.setTransactionAmount(bill.getBillAmount());
-		transaction.setTransationType(bill.getBillType());
-		// transaction.setUser(user);
-		return saveTransaction.addTransactionHandler(transaction, user.getId());
+		transaction.setTransactionAmount(billPayment.getBillAmount());
+		transaction.setTransationType(billPayment.getBillType());
+		transaction.setUser(user);
+		
+		user.getWallet().setBalance((user.getWallet().getBalance()-billPayment.getBillAmount()));
+		
+		//saveTransaction.addTransactionService(transaction)
+		bDao.save(billPayment2);
+		return billPayment;
+		//return transaction;
 	}
 
+	@Override
+	public List<ViewBill> viewBillPayment(String uniqId) throws BillPaymentException {
+
+		Optional<CurrentSession> opt1 = curDao.findById(uniqId);
+
+		if (!opt1.isPresent()) {
+			throw new BillPaymentException("first you have to login..");
+		}
+
+		UserAccountDetails user = rDao.findById((curDao.findById(uniqId).get()).getUserId()).get();
+
+		// Set<BillPayment> bao
+
+		Wallet wallet = user.getWallet();
+
+		List<BillPayment> bills2 = bDao.findByUserId(user.getId());
+		
+		List<ViewBill> viewBills = new ArrayList<>();
+
+		for (BillPayment b : bills2) {
+				viewBills.add(new ViewBill(b.getBillId(), b.getBillAmount(), b.getBillType(), wallet.getWalletId()));
+		}
+
+		return viewBills;
+	}
 }
+	

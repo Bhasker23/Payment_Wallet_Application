@@ -66,8 +66,4 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	}
 
 
-
-
-	
-
 }
