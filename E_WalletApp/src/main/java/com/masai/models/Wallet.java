@@ -8,6 +8,8 @@ import javax.persistence.Id;
 
 import javax.persistence.ManyToOne;
 
+import javax.persistence.OneToOne;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -21,14 +23,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Wallet {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer walletId;
 	private Double balance;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private UserAccountDetails user;
-	
 }

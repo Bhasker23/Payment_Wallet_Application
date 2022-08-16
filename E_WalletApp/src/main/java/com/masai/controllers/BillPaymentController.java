@@ -1,5 +1,6 @@
 package com.masai.controllers;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.BillPayment;
 import com.masai.models.ViewBill;
-import com.masai.models.Wallet;
 import com.masai.servicesIntr.BillPaymentIntr;
 
 @RestController
@@ -23,11 +23,11 @@ public class BillPaymentController {
 	private BillPaymentIntr billService;
 	
 	@PostMapping("/bill/{uniqId}")
-	public ResponseEntity<ViewBill> saveBillPayment(@PathVariable("uniqId") String uniqId, @RequestBody BillPayment billPayment) {
+	public ResponseEntity<BillPayment> saveBillPayment(@PathVariable("uniqId") String uniqId, @RequestBody BillPayment billPayment) {
 		
-		ViewBill bill= billService.addBillPayment(billPayment, uniqId);
+		BillPayment bill= billService.addBillPayment(billPayment, uniqId);
 		
-		return new ResponseEntity<ViewBill>(bill, HttpStatus.OK);
+		return new ResponseEntity<>(bill, HttpStatus.OK);
 	}
 	
 	@GetMapping("/viewBill/{uniqId}")
@@ -38,6 +38,7 @@ public class BillPaymentController {
 		return new ResponseEntity<List<ViewBill>>(billPayment, HttpStatus.OK);
 		
 	}
-	
-	
 }
+	
+
+

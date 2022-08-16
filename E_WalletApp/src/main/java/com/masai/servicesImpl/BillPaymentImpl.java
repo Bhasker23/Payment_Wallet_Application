@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.masai.LoginSignUp.CurrentSession;
 import com.masai.exceptions.BillPaymentException;
 import com.masai.models.BillPayment;
-import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.models.ViewBill;
 import com.masai.models.Wallet;
@@ -18,6 +17,7 @@ import com.masai.repositories.BillPaymentDAO;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveWalletDAL;
+
 import com.masai.servicesIntr.BillPaymentIntr;
 
 @Service
@@ -35,65 +35,26 @@ public class BillPaymentImpl implements BillPaymentIntr {
 	@Autowired
 	private CurrentSessionDAL curDao;
 
+	@Autowired
+
 	@Override
-	public ViewBill addBillPayment(BillPayment billPayment, String uniqId) {
+	public BillPayment addBillPayment(BillPayment billPayment, String uniqId) {
 
-		Optional<CurrentSession> opt = curDao.findById(uniqId);
+		UserAccountDetails user = rDao.findById((curDao.findById(uniqId).get()).getUserId()).get();
 
-		if (!opt.isPresent()) {
+		if (user == null) {
 			throw new BillPaymentException("first you have to login..");
 		}
-		
-//		System.out.println("bill amount"+billPayment.getBillBmount());
-		
-		Optional<UserAccountDetails> User=rDao.findById(opt.get().getUserId());
 
-		Optional<Wallet> wallet = wDao.findById(User.get().getWallet().getWalletId());
-//		
-//		if(!wallet.isPresent()) {
-//			throw new BillPaymentException("Wallet doesn't exist by Id"+billPayment.getWallet().getWalletId());
-//		}
-//		
-		Wallet wal = wallet.get();
-		
-		if (wal.getBalance() ==null) {
-			throw new BillPaymentException("Insufficent balance in wallet");
-		}
+		BillPayment billPayment2 = new BillPayment();
+		billPayment2.setBillAmount(billPayment.getBillAmount());
+		billPayment2.setBillId(billPayment.getBillId());
+		billPayment2.setBillType(billPayment.getBillType());
+		billPayment2.setUser(user);
 
-		if (wal.getBalance() < billPayment.getBillBmount()) {
-			throw new BillPaymentException("Insufficent balance in wallet");
-		}
+		bDao.save(billPayment2);
 
-		wal.setBalance(wal.getBalance() - billPayment.getBillBmount());
-
-		wDao.save(wal);
-
-		Transaction tr = new Transaction();
-		tr.setTransationType(billPayment.getBillType());
-		tr.setTransactionAmount(billPayment.getBillBmount());
-
-		Optional<CurrentSession> opt2 = curDao.findById(uniqId);
-
-		Optional<UserAccountDetails> user = rDao.findById(opt2.get().getUserId());
-
-		UserAccountDetails uad = user.get();
-
-		uad.getTransactions().add(tr);
-
-		rDao.save(uad);
-		
-		ViewBill vBill=new ViewBill();
-		vBill.setBillId(billPayment.getBillId());
-		vBill.setBillType(billPayment.getBillType());
-		vBill.setBillAmount(billPayment.getBillBmount());
-		vBill.setWalletId(wal.getWalletId());
-
-		 System.out.println("billvjhvjv"+billPayment);
-		billPayment.getWallet().setWalletId(wal.getWalletId());
-		
-		 bDao.save(billPayment);
-		 
-		 return vBill;
+		return billPayment;
 	}
 
 	@Override
@@ -105,35 +66,87 @@ public class BillPaymentImpl implements BillPaymentIntr {
 			throw new BillPaymentException("first you have to login..");
 		}
 
-		Optional<UserAccountDetails> user = rDao.findById(opt1.get().getUserId());
+		UserAccountDetails user = rDao.findById((curDao.findById(uniqId).get()).getUserId()).get();
 
-		Optional<Wallet> opt = wDao.findById(user.get().getWallet().getWalletId());
+		// Set<BillPayment> bao
 
-		List<BillPayment> totalbill = bDao.findAll();
+		Wallet wallet = user.getWallet();
 
-//		System.out.println(totalbill);
-		List<ViewBill> viewBill = new ArrayList<>();
-		
+		List<BillPayment> bills = bDao.findAll();
+		List<ViewBill> viewBills = new ArrayList<>();
 
-		for (BillPayment bill : totalbill) {
-			
-			if (bill.getWallet().getWalletId() == opt.get().getWalletId()) {
-			
-				ViewBill vBill = new ViewBill();
-				vBill.setBillId(bill.getBillId());
-				vBill.setBillAmount(bill.getBillBmount());
-				vBill.setBillType(bill.getBillType());
-				vBill.setWalletId(bill.getWallet().getWalletId());
-				
-//				System.out.println(bill);
-//				bipy.getWallet().setWalletId(bill.getWallet().getWalletId());
-				
-				viewBill.add(vBill);
+		for (BillPayment b : bills) {
+			if (b.getUser().getId().equals(user.getTransactions())) {
+				viewBills.add(new ViewBill(b.getBillId(), b.getBillAmount(), b.getBillType(), wallet.getWalletId()));
+
 			}
-
 		}
 
-		return viewBill;
+		return viewBills;
 	}
 
+	// Optional<CurrentSession> opt1 = curDao.findById(uniqId);
+//
+//		if (!opt1.isPresent()) {
+//			throw new BillPaymentException("first you have to login..");
+//		}
+//
+//		Optional<UserAccountDetails> user = rDao.findById(opt1.get().getUserId());
+//
+//		Optional<Wallet> opt = wDao.findById(user.get().getWallet().getWalletId());
+//
+//		List<BillPayment> totalbill = bDao.findAll();
+//
+////		System.out.println(totalbill);
+//		List<ViewBill> viewBill = new ArrayList<>();
+//		
+//
+//		for (BillPayment bill : totalbill) {
+//			
+//			if (bill.getWallet().getWalletId() == opt.get().getWalletId()) {
+//			
+//				ViewBill vBill = new ViewBill();
+//				vBill.setBillId(bill.getBillId());
+//				vBill.setBillAmount(bill.getBillAmount());
+//				vBill.setBillType(bill.getBillType());
+//				vBill.setWalletId(bill.getWallet().getWalletId());
+//				
+////				System.out.println(bill);
+////				bipy.getWallet().setWalletId(bill.getWallet().getWalletId());
+//				
+//				viewBill.add(vBill);
+//			}
+
 }
+
+//	private LoginDAL currentSessionDB;
+//
+//	@Autowired
+//	private RegisterUserDAL userDB;
+//
+//	@Autowired
+//	private TranscationController saveTransaction;
+//
+//	@Override
+//	public Transaction payBill(BillPayment bill, String uid) {
+//
+//		UserAccountDetails user = (userDB.findById((currentSessionDB.findById(uid).get()).getUserId())).get();
+//
+//		if (user == null) {
+//			throw new UserNotFindException("please Login first...");
+//		}
+//
+//		Transaction transaction = new Transaction();
+//
+//		Random random = new Random();
+//
+//		transaction.setTransactionId(Math.abs(random.nextInt() + 8769797));
+//
+////		transaction.setDescription(bill.getBillType() + " bill of amount " + bill.getBillAmount() + " " + " paid on "
+////				+ transaction.getLocalDateTime());
+//		transaction.setDescription("bill paid");
+//		transaction.setTransactionAmount(bill.getBillAmount());
+//		transaction.setTransationType(bill.getBillType());
+//		// transaction.setUser(user);
+//		return saveTransaction.addTransactionHandler(transaction, user.getId());
+//>>>>>>> 301c524c7a34a0bc97843cfddd56816b99590b7b

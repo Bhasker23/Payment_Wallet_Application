@@ -1,5 +1,6 @@
 package com.masai.servicesIntr;
 
+
 import java.util.List;
 
 import com.masai.exceptions.BillPaymentException;
@@ -9,8 +10,10 @@ import com.masai.models.Wallet;
 
 public interface BillPaymentIntr {
 
-	public ViewBill addBillPayment(BillPayment billPayment,String uniqId);
+	public BillPayment addBillPayment(BillPayment billPayment,String uniqId);
 	
 	public List<ViewBill> viewBillPayment(String uniqId) throws BillPaymentException;
 	
 }
+
+
