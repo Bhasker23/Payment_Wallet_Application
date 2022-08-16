@@ -2,8 +2,10 @@ package com.masai.servicesImpl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.LoginSignUp.CurrentSession;
@@ -25,9 +27,13 @@ import com.masai.servicesIntr.WalletServiceIntr;
 
 public class WalletServiceImp implements WalletServiceIntr {
 
+	@Autowired
+	private TransactionServiceImpl trasactionCurd;
+
+	Random random = new Random();
+
 	@Override
-	public CoustomerWithWallet showBalanceInWallet( RegisterUserDAL regDao,
-			CurrentSessionDAL csDal, String unqId) {
+	public CoustomerWithWallet showBalanceInWallet(RegisterUserDAL regDao, CurrentSessionDAL csDal, String unqId) {
 
 		CurrentSession csc = csDal.getById(unqId);
 
@@ -53,7 +59,7 @@ public class WalletServiceImp implements WalletServiceIntr {
 	}
 
 	@Override
-	public Wallet fundTransferFromOneWalletToOtherWallet( String targetMobileNumber, Double amount,
+	public Transaction fundTransferFromOneWalletToOtherWallet(String targetMobileNumber, Double amount,
 			RegisterUserDAL regDao, CurrentSessionDAL csDal, String unqId) {
 
 		CurrentSession csc = csDal.getById(unqId);
@@ -65,26 +71,23 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		UserAccountDetails sourceUser = regDao.getById(csc.getUserId());
 
+		Set<BeneficiaryDetails> bdSet = sourceUser.getBeneficiaryDetails();
 
-		Set<BeneficiaryDetails> bdSet=sourceUser.getBeneficiaryDetails();
-		
-		
-		boolean f=true;
-		for(BeneficiaryDetails bn:bdSet) {
-			
-			if(bn.getPhoneNumber().equals(targetMobileNumber)) {
-				f=false;
+		boolean f = true;
+		for (BeneficiaryDetails bn : bdSet) {
+
+			if (bn.getPhoneNumber().equals(targetMobileNumber)) {
+				f = false;
 				break;
 			}
 		}
-		
-		if(f) {
-			
+
+		if (f) {
+
 			throw new CustomerDoesNotExist("Target mobile number does not added in Beneficiary list");
 		}
 
 		UserAccountDetails targetUser = regDao.getById(targetMobileNumber);
-
 
 		if (sourceUser.getWallet().getBalance() == null) {
 
@@ -106,32 +109,68 @@ public class WalletServiceImp implements WalletServiceIntr {
 			targetUser.getWallet().setBalance(targetUser.getWallet().getBalance() + amount);
 
 		}
+		
+		
+		
 
-		Transaction st = new Transaction();
+//		Transaction st = new Transaction();
+//
+//		st.setTransationType("Amount Transfer from wallet");
+//
+//		st.setTransactionAmount(amount);
+//
+//		sourceUser.getTransactions().add(st);
+		
+		
+		Transaction tr = new Transaction();
 
-		st.setTransationType("Amount Transfer from wallet");
+		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
 
-		st.setTransactionAmount(amount);
+		tr.setTransactionAmount(amount);
 
-		sourceUser.getTransactions().add(st);
+		tr.setTransationType("Amount transfer to Beneficiary");
+		tr.setDescription("Rs " + amount + " has been send to "+targetMobileNumber);
+
+		// findUser.getTransactions().add(tr);
+		trasactionCurd.addTransactionService(tr, sourceUser.getCustomer().getPhone());
+		
+		
 
 		regDao.save(sourceUser);
+		
+		
+		
 
-		Transaction dt = new Transaction();
-
-		dt.setTransationType("Amount Recive by wallet");
-
-		dt.setTransactionAmount(amount);
-
-		targetUser.getTransactions().add(dt);
+//		Transaction dt = new Transaction();
+//
+//		dt.setTransationType("Amount Recive by wallet");
+//
+//		dt.setTransactionAmount(amount);
+//
+//		targetUser.getTransactions().add(dt);
+		
+		
+//		Transaction tr2 = new Transaction();
+//
+//		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
+//
+//		tr.setTransactionAmount(amount);
+//
+//		tr.setTransationType("Amount received");
+//		tr.setDescription("Rs " + amount + " has been received from "+sourceUser.getCustomer().getPhone());
+//
+//		// findUser.getTransactions().add(tr);
+//		trasactionCurd.addTransactionService(tr2, targetUser.getCustomer().getPhone());
+//		
+		
 
 		regDao.save(targetUser);
 
-		return targetUser.getWallet();
+		return tr;
 	}
 
 	@Override
-	public CoustomerWithWallet depostAmountFromWalletToBankAccount(double amount, RegisterUserDAL regDao,
+	public Transaction depostAmountFromWalletToBankAccount(double amount, RegisterUserDAL regDao,
 			CurrentSessionDAL csDal, String unqId) {
 
 		CurrentSession csc = csDal.getById(unqId);
@@ -143,7 +182,6 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		UserAccountDetails user = regDao.getById(csc.getUserId());
 
-		
 		if (user.getBankAccounts().size() == 0) {
 
 			throw new CustomerDoesNotExist("Bank Account not added first add the bank account");
@@ -176,23 +214,19 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		Transaction tr = new Transaction();
 
+		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
+
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("wallet to Bank account transfer");
+		tr.setTransationType("Wallet to Bank Account money transfer");
+		tr.setDescription("Rs " + amount + " has been added to your Bank");
 
-		user.getTransactions().add(tr);
+		// findUser.getTransactions().add(tr);
+		trasactionCurd.addTransactionService(tr, user.getCustomer().getPhone());
 
 		regDao.save(user);
 
-		CoustomerWithWallet cww = new CoustomerWithWallet();
-
-		cww.setName(user.getCustomer().getName());
-
-		cww.setPhoneNumber(user.getCustomer().getPhone());
-
-		cww.setWallet(user.getWallet());
-
-		return cww;
+		return tr;
 	}
 
 	@Override
@@ -204,7 +238,7 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 			throw new CustomerDoesNotExist("you are not sign in");
 		}
-		
+
 		return cusDep.findAll();
 	}
 
@@ -217,25 +251,25 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 			throw new CustomerDoesNotExist("you are not sign in");
 		}
-		
+
 		UserAccountDetails user = regDao.getById(csc.getUserId());
-		
+
 		user.getCustomer().setName(cus.getName());
 
 		user.getCustomer().setPassword(cus.getPassword());
-		
+
 		regDao.save(user);
-		
+
 		csc.setUserId(cus.getPhone());
-		
+
 		csDal.save(csc);
 
 		return user.getCustomer();
 	}
 
 	@Override
-	public CoustomerWithWallet addMoneyIntoWalletFromBankAccount(double amount, RegisterUserDAL regDao,
-			CurrentSessionDAL csDal, String unqId) {
+	public Transaction addMoneyIntoWalletFromBankAccount(double amount, RegisterUserDAL regDao, CurrentSessionDAL csDal,
+			String unqId) {
 
 		CurrentSession csc = csDal.getById(unqId);
 
@@ -243,15 +277,14 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 			throw new CustomerDoesNotExist("you are not sign in");
 		}
-		
 
 		Optional<UserAccountDetails> opt = regDao.findById(csc.getUserId());
-		
-		UserAccountDetails findUser=opt.get();
+
+		UserAccountDetails findUser = opt.get();
 
 		Set<BankAccount> bks = findUser.getBankAccounts();
 
-		if (bks.size()==0) {
+		if (bks.size() == 0) {
 
 			throw new CustomerDoesNotExist("Bank account not added");
 		}
@@ -260,8 +293,8 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		for (BankAccount bk : bks) {
 
-			if(bk.getAccountNumber()!=null) {
-				
+			if (bk.getAccountNumber() != null) {
+
 				if (bk.getBalance() >= amount) {
 
 					bk.setBalance(bk.getBalance() - amount);
@@ -270,9 +303,9 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 					break;
 				}
-				
+
 			}
-			
+
 		}
 
 		if (b2) {
@@ -289,23 +322,20 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		Transaction tr = new Transaction();
 
+		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
+
 		tr.setTransactionAmount(amount);
 
 		tr.setTransationType("bank to wallet money transfer");
+		tr.setDescription("Rs " + amount + " has been added to your wallet");
 
-		findUser.getTransactions().add(tr);
+		// findUser.getTransactions().add(tr);
+		trasactionCurd.addTransactionService(tr, findUser.getCustomer().getPhone());
 
 		regDao.save(findUser);
 
-		CoustomerWithWallet cus = new CoustomerWithWallet();
 
-		cus.setName(findUser.getCustomer().getName());
-
-		cus.setPhoneNumber(findUser.getCustomer().getPhone());
-
-		cus.setWallet(findUser.getWallet());
-
-		return cus;
+		return tr;
 	}
 
 }

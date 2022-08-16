@@ -24,26 +24,7 @@ public class BeneficiaryDetailsController {
 	private BenificiaryDetailsServiceIntr benDetSerIntr;
 	
 	 
-	/*postMaping
-	 * 
-	 * http://localhost:8080/Beneficiaries
-	 * 
-	       {
-		    "phoneNumber": "123",
-		    "name": "laxmi"
-    		}
-    		
-    		  {
-		    "phoneNumber": "1234",
-		    "name": "Bhasker kumar"
-		    }
-		    
-		        {
-			    "phoneNumber": "12345",
-			    "name": "shatyam jha"
-				}
-	 */
-	//save 
+
 	@PostMapping(value="/Beneficiaries/{uniqueId}")
 	public ResponseEntity<BeneficiaryDetails> saveBeneficiaryHandler(@RequestBody BeneficiaryDetails beneficiaryDetails,@PathVariable String uniqueId){
 		

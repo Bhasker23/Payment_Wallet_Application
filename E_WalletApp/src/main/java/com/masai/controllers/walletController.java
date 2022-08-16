@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
+import com.masai.models.Transaction;
 import com.masai.models.Wallet;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
@@ -49,7 +50,7 @@ public class walletController {
 	
 	
 	@PutMapping("/fundTransfer/{tNumber}/{amount}/{unqId}")
-	public Wallet fundTf(@PathVariable String tNumber, @PathVariable double amount,@PathVariable String unqId) {
+	public Transaction fundTf(@PathVariable String tNumber, @PathVariable double amount,@PathVariable String unqId) {
 		
 		return imp.fundTransferFromOneWalletToOtherWallet( tNumber, amount, regDao, csDal, unqId);
 	}
@@ -59,7 +60,7 @@ public class walletController {
 	
 	
 	@PutMapping("/depositAmount/{amount}/{unqId}")
-	public CoustomerWithWallet depositAmountInWallet(@PathVariable double amount,@PathVariable String unqId) {
+	public Transaction depositAmountInWallet(@PathVariable double amount,@PathVariable String unqId) {
 		
 		return imp.depostAmountFromWalletToBankAccount(amount, regDao, csDal, unqId);
 	}
@@ -84,7 +85,7 @@ public class walletController {
 	
 	
 	@PutMapping("/addMoney/{amount}/{unqId}")
-	public CoustomerWithWallet addMoneyIntoWallet(@PathVariable double amount,@PathVariable String unqId) {
+	public Transaction addMoneyIntoWallet(@PathVariable double amount,@PathVariable String unqId) {
 		
 		return imp.addMoneyIntoWalletFromBankAccount(amount, regDao, csDal, unqId);
 	}
