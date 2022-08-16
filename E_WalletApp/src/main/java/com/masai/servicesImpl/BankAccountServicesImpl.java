@@ -30,15 +30,25 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 
 	@Override
 	public BankAccount addBank(BankAccount bankAccount, String uniqueId) throws UserNotLogedinException,BankAlreadyAdded {
+		
+		System.out.println("0000");
+		
 		UserAccountDetails user = userDB.findById((loginDb.findById(uniqueId).get()).getUserId()).get();
+		
+		System.out.println("111");
 		if(user==null) {
 			throw new UserNotLogedinException("Please Login first");
 		}
+		
+		System.out.println("222");
 		if((bankDetrailsDb.findById(bankAccount.getAccountNumber())).isPresent()) {
 			throw new BankAlreadyAdded("Bank with "+bankAccount.getAccountNumber()+" this Account Nuber Already Exist");
 		}
+		System.out.println("333");
 		bankAccount.setUser(user);
 		user.getBankAccounts().add(bankAccount);
+		
+		System.out.println("444");
 		userDB.save(user);
 		return bankAccount;
 	}
