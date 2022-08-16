@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.Set;
 
@@ -14,7 +14,6 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveBankAccDAL;
-import com.masai.servicesIntr.BankServicesIntr;
 
 @Service
 public class BankAccountServicesImpl implements BankServicesIntr {

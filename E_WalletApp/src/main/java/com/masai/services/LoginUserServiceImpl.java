@@ -1,17 +1,18 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.LoginSignUp.CurrentSession;
-import com.masai.LoginSignUp.Login;
 import com.masai.exceptions.UserNotFindException;
 import com.masai.models.Customer;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.servicesIntr.LoginUserServicIntr;
+import com.masai.userInput.Credentials;
+import com.masai.userInput.CurrentSession;
+import com.masai.userInput.Login;
+import com.masai.userInput.PasswordGenerator;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -23,18 +24,23 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 
 	@Autowired
 	private CurrentSessionDAL currentUserDB;
+	
+	@Autowired
+	private PasswordGenerator passGenerater;
 
 	@Override
 	public String userLogin(Login logincred) {
-
+		
 		Optional<Customer> opt = customerDB.findById(logincred.getUserid());
-
+		
 		if (opt.isEmpty()) {
 			throw new UserNotFindException("Please signUp First..");
 		}
 
-		if (!((opt.get().getPassword()).equals(logincred.getPassword()))) {
+		String p1 = passGenerater.getPass(new Credentials(logincred.getUserid(),logincred.getPassword()));
+		String p2 = opt.get().getPassword();
 
+		if (!p1.equals(p2)) {
 			throw new UserNotFindException("Password is incorrect");
 		}
 
@@ -64,7 +70,5 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	  return name + " has been loged out.";
 	  
 	}
-
-
 
 }

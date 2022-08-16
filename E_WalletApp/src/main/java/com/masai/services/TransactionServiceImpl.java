@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,7 +12,6 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveTransactionDAL;
-import com.masai.servicesIntr.TransactionServiceIntr;
 
 @Service
 public class TransactionServiceImpl implements TransactionServiceIntr {
@@ -28,13 +27,9 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	// ==========================================================================================
 
 	@Override
-	public Transaction addTransactionService(Transaction transaction, String userid) {
+	public Transaction addTransactionService(Transaction transaction) {
 
-		UserAccountDetails users = registerUserDAL.findById(userid).get();
-		//
-//		UserAccountDetails user1 = new UserAccountDetails();
-//		user1.setId(userid);
-		// transaction.setUser(users);
+		UserAccountDetails users = transaction.getUser();
 
 		users.getTransactions().add(transaction);
 

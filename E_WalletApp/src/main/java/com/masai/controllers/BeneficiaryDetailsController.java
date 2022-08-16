@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.BeneficiaryDetails;
 import com.masai.models.UserAccountDetails;
-import com.masai.servicesIntr.BenificiaryDetailsServiceIntr;
+import com.masai.services.BenificiaryDetailsServiceIntr;
 
 @RestController
 public class BeneficiaryDetailsController {
