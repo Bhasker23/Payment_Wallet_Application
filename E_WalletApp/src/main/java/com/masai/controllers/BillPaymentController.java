@@ -23,9 +23,8 @@ public class BillPaymentController {
 	@PostMapping("/paybill/{uid}")
 	public ResponseEntity<Transaction> payBill(@RequestBody BillPayment billPayment, @PathVariable String uid) {
 
-		// ;
-
 		return new ResponseEntity<>(billImpl.payBill(billPayment, uid), HttpStatus.OK);
+	
 	}
 
 }

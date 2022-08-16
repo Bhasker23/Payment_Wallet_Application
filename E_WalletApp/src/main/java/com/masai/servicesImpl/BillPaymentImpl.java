@@ -46,8 +46,8 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		transaction.setDescription("bill paid");
 		transaction.setTransactionAmount(bill.getBillAmount());
 		transaction.setTransationType(bill.getBillType());
-		// transaction.setUser(user);
-		return saveTransaction.addTransactionHandler(transaction, user.getId());
+		transaction.setUser(user);
+		return saveTransaction.addTransactionHandler(transaction);
 	}
 
 }

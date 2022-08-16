@@ -14,8 +14,7 @@ import com.masai.exceptions.ExceptionDetails;
 import com.masai.exceptions.NotAnyBankAddedYet;
 import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.exceptions.UserInputInvalidException;
-
-import com.masai.exceptions.UserNotLogedinException;
+import com.masai.exceptions.UserNotFindException;
 
 
 @ControllerAdvice

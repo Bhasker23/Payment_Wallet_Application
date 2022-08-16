@@ -12,6 +12,8 @@ import com.masai.models.Customer;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.SaveCustomerDAL;
 import com.masai.servicesIntr.LoginUserServicIntr;
+import com.masai.userInput.Credentials;
+import com.masai.userInput.PasswordGenerator;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -23,18 +25,23 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 
 	@Autowired
 	private CurrentSessionDAL currentUserDB;
+	
+	@Autowired
+	private PasswordGenerator passGenerater;
 
 	@Override
 	public String userLogin(Login logincred) {
-
+		
 		Optional<Customer> opt = customerDB.findById(logincred.getUserid());
-
+		
 		if (opt.isEmpty()) {
 			throw new UserNotFindException("Please signUp First..");
 		}
 
-		if (!((opt.get().getPassword()).equals(logincred.getPassword()))) {
+		String p1 = passGenerater.getPass(new Credentials(logincred.getUserid(),logincred.getPassword()));
+		String p2 = opt.get().getPassword();
 
+		if (!p1.equals(p2)) {
 			throw new UserNotFindException("Password is incorrect");
 		}
 
@@ -64,19 +71,4 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	  return name + " has been loged out.";
 	  
 	}
-
-
-	
-	
-
-
-		String uniqueID = RandomString.make(5);
-		currentSession.setUniqueId(uniqueID);
-
-		currentUserDB.save(currentSession);
-
-		return uniqueID;
-
-	}
-
 }

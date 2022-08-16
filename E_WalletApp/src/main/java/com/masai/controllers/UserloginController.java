@@ -23,7 +23,8 @@ public class UserloginController {
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser(@RequestBody Login login){
 		
-
+         
+		System.out.println("satyam");
 		return new ResponseEntity<>(curd.userLogin(login), HttpStatus.OK);
 
 	}

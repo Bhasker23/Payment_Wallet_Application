@@ -17,6 +17,8 @@ import com.masai.repositories.SaveCustomerDAL;
 import com.masai.repositories.SaveTransactionDAL;
 import com.masai.repositories.SaveWalletDAL;
 import com.masai.servicesIntr.RegisterUserServiceIntr;
+import com.masai.userInput.Credentials;
+import com.masai.userInput.PasswordGenerator;
 import com.masai.userInput.UserInput;
 
 @Service
@@ -40,6 +42,9 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	@Autowired
 	private SaveWalletDAL walletDB;
 
+	@Autowired
+	private PasswordGenerator passGenerater;
+	
 	@Override
 	public UserAccountDetails registerUser(UserInput input) {
 
@@ -51,8 +56,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 		customer.setName(input.getName());
 		customer.setPhone(input.getPhone());
-		customer.setPassword(input.getPassword());
-
+		customer.setPassword(passGenerater.getPass(new Credentials(input.getPhone(),input.getPassword())));
 		
 	    BankAccount bankAccount = new BankAccount();
 	    
@@ -70,8 +74,9 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
         
 	    wallet.setUser(userAccountDetails);
 	    customer.setUser(userAccountDetails);
+	    userDB.save(userAccountDetails);
 	    
-	   return userDB.save(userAccountDetails);
-
+	    userAccountDetails.getCustomer().setPassword(input.getPassword());
+	    return userAccountDetails;
 	}
 }

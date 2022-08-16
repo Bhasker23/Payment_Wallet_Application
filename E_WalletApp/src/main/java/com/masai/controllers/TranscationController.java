@@ -19,9 +19,9 @@ public class TranscationController {
 	@Autowired
 	TransactionServiceImpl transactionServiceImpl;
 
-	public Transaction addTransactionHandler(Transaction transaction, String userId) {
+	public Transaction addTransactionHandler(Transaction transaction) {
 
-		return transactionServiceImpl.addTransactionService(transaction, userId);
+		return transactionServiceImpl.addTransactionService(transaction);
 
 	}
 	// =============================================================================================
