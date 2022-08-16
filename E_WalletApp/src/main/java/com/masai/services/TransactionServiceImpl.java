@@ -29,11 +29,7 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	@Override
 	public Transaction addTransactionService(Transaction transaction) {
 
-<<<<<<< HEAD:E_WalletApp/src/main/java/com/masai/servicesImpl/TransactionServiceImpl.java
-		UserAccountDetails users = registerUserDAL.findById(userid).get();
-=======
 		UserAccountDetails users = transaction.getUser();
->>>>>>> b96a3d667e861414f101942cb00fdd3897c5e4b0:E_WalletApp/src/main/java/com/masai/services/TransactionServiceImpl.java
 
 		users.getTransactions().add(transaction);
 
