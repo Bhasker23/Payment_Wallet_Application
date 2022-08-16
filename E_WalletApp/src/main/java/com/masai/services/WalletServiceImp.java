@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.LoginSignUp.CurrentSession;
 import com.masai.exceptions.CustomerDoesNotExist;
 import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BankAccount;
@@ -17,11 +16,10 @@ import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
-import com.masai.models.Wallet;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.servicesIntr.WalletServiceIntr;
+import com.masai.userInput.CurrentSession;
 
 @Service
 
@@ -109,19 +107,7 @@ public class WalletServiceImp implements WalletServiceIntr {
 			targetUser.getWallet().setBalance(targetUser.getWallet().getBalance() + amount);
 
 		}
-		
-		
-		
 
-//		Transaction st = new Transaction();
-//
-//		st.setTransationType("Amount Transfer from wallet");
-//
-//		st.setTransactionAmount(amount);
-//
-//		sourceUser.getTransactions().add(st);
-		
-		
 		Transaction tr = new Transaction();
 
 		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
@@ -130,40 +116,12 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransationType("Amount transfer to Beneficiary");
 		tr.setDescription("Rs " + amount + " has been send to "+targetMobileNumber);
-
-		// findUser.getTransactions().add(tr);
-		trasactionCurd.addTransactionService(tr, sourceUser.getCustomer().getPhone());
+        tr.setUser(sourceUser);
+		//findUser.getTransactions().add(tr);
+		trasactionCurd.addTransactionService(tr);
 		
-		
-
 		regDao.save(sourceUser);
 		
-		
-		
-
-//		Transaction dt = new Transaction();
-//
-//		dt.setTransationType("Amount Recive by wallet");
-//
-//		dt.setTransactionAmount(amount);
-//
-//		targetUser.getTransactions().add(dt);
-		
-		
-//		Transaction tr2 = new Transaction();
-//
-//		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
-//
-//		tr.setTransactionAmount(amount);
-//
-//		tr.setTransationType("Amount received");
-//		tr.setDescription("Rs " + amount + " has been received from "+sourceUser.getCustomer().getPhone());
-//
-//		// findUser.getTransactions().add(tr);
-//		trasactionCurd.addTransactionService(tr2, targetUser.getCustomer().getPhone());
-//		
-		
-
 		regDao.save(targetUser);
 
 		return tr;
@@ -220,9 +178,10 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransationType("Wallet to Bank Account money transfer");
 		tr.setDescription("Rs " + amount + " has been added to your Bank");
+		tr.setUser(user);
 
 		// findUser.getTransactions().add(tr);
-		trasactionCurd.addTransactionService(tr, user.getCustomer().getPhone());
+		trasactionCurd.addTransactionService(tr);
 
 		regDao.save(user);
 
@@ -328,9 +287,10 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransationType("bank to wallet money transfer");
 		tr.setDescription("Rs " + amount + " has been added to your wallet");
+		tr.setUser(findUser);
 
 		// findUser.getTransactions().add(tr);
-		trasactionCurd.addTransactionService(tr, findUser.getCustomer().getPhone());
+		trasactionCurd.addTransactionService(tr);
 
 		regDao.save(findUser);
 

@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import org.springframework.stereotype.Service;
 
@@ -27,9 +29,9 @@ public class BillPayment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer billId;
-
+	@Min(value = 10)
 	private Double billAmount;
-
+	@Size(min = 3)
 	private String billType;
 
 	@ManyToOne(cascade = CascadeType.ALL)
