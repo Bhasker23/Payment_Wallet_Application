@@ -30,4 +30,5 @@ public class RegisterUserController {
 
 		return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
 	}
+
 }

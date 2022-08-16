@@ -71,4 +71,5 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	  return name + " has been loged out.";
 	  
 	}
+
 }

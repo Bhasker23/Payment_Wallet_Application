@@ -9,20 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-
-import org.hibernate.annotations.ForeignKey;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 
 @Setter
 @Getter
@@ -40,16 +32,19 @@ public class UserAccountDetails {
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 
+
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BankAccount> bankAccounts;
 
+
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<BeneficiaryDetails> beneficiaryDetails;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Wallet wallet;
-
+	
+    
 }
