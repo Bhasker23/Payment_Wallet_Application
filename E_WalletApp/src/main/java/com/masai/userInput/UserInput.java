@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserInput {
 	
+	@Pattern(regexp = "^[6-9][0-9]{9}",message = "Invaild Phone Number")
 	private String phone;
+	@Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}",message = "Invalid Password")
 	private String password;
+	@Size(min = 3,max = 15,message = "Invaild Name")
 	private String name;
 	
 	@Override

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,6 +26,7 @@ public class Wallet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer walletId;
+	@Min(value = 0)
 	private Double balance;
 
 	@OneToOne(cascade = CascadeType.ALL)

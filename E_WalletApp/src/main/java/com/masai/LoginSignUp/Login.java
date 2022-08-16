@@ -2,6 +2,8 @@ package com.masai.LoginSignUp;
 
 import java.util.Objects;
 
+import javax.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +16,7 @@ public class Login {
 
 	private String userid;
 	private String password;
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

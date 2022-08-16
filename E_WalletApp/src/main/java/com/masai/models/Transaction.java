@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,9 +24,12 @@ public class Transaction {
 
 	@Id
 	private Integer transactionId;
+	@Size(min = 3,max = 15)
 	private String transationType;
 	private LocalDateTime localDateTime;
+	@Min(value = 0)
 	private Double transactionAmount;
+	@Size(min = 10)
 	private String description;
 
 	@ManyToOne(cascade = CascadeType.ALL)
