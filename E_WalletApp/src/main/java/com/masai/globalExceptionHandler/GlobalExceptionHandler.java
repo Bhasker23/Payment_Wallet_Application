@@ -22,10 +22,6 @@ import com.masai.exceptions.NotAnyBankAddedYet;
 import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.exceptions.UserInputInvalidException;
 import com.masai.exceptions.UserNotFindException;
-<<<<<<< HEAD
-=======
-
->>>>>>> 8998d62cb27695b1561a25a0bfc38e53c5749e15
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,35 +47,7 @@ public class GlobalExceptionHandler {
 		exceptionDetails.setLocalDate(LocalDate.now());
 		return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
 	}
-//<<<<<<< HEAD
-//	
-//	@ExceptionHandler(BillPaymentException.class)
-//	public ResponseEntity<BillErrorDetails> billHandler1(BillPaymentException be, WebRequest wq){
-//		
-//		BillErrorDetails err = new BillErrorDetails();
-//		err.setTimestamp(LocalDate.now());
-//		err.setMessage(be.getMessage());
-//		err.setDetails(wq.getDescription(false));
-//		
-//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
-//		
-//	}
-//	
-//	@ExceptionHandler(NoHandlerFoundException.class)
-//	public ResponseEntity<BillErrorDetails> billHandler2(NoHandlerFoundException be, WebRequest wq){
-//		
-//		BillErrorDetails err = new BillErrorDetails();
-//		err.setTimestamp(LocalDate.now());
-//		err.setMessage(be.getMessage());
-//		err.setDetails(wq.getDescription(false));
-//		
-//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
-//		
-//	}
-//	
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr){
-//=======
+
 
 	@ExceptionHandler(UserNotFindException.class)
 	public ResponseEntity<ExceptionDetails> userNotFind(UserNotFindException ex, WebRequest wr) {
