@@ -122,9 +122,14 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(InsufficientBalance.class)
-	public ResponseEntity<String> insfBal( InsufficientBalance isb){
+	public ResponseEntity<ExceptionDetails> insfBal( InsufficientBalance isb,WebRequest wr){
 		
-		return new ResponseEntity<String>(isb.getMessage(), HttpStatus.BAD_REQUEST);
+		ExceptionDetails exp = new ExceptionDetails();
+		exp.setMessage(isb.getMessage());
+		exp.setLocalDate(LocalDate.now());
+		exp.setDescription(wr.getDescription(false));
+		
+		return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)

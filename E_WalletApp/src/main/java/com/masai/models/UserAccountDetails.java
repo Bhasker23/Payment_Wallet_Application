@@ -46,7 +46,5 @@ public class UserAccountDetails {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Wallet wallet;
 	
-//	@OneToMany(cascade = CascadeType.ALL)
-//	private Set<BillPayment> bills;
     
 }

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.masai.LoginSignUp.CurrentSession;
 import com.masai.exceptions.BillPaymentException;
+import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BillPayment;
+import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.models.ViewBill;
 import com.masai.models.Wallet;
@@ -36,7 +38,8 @@ public class BillPaymentImpl implements BillPaymentIntr {
 	private CurrentSessionDAL curDao;
 
 	@Autowired
-
+	private TransactionServiceImpl saveTransaction;
+	
 	@Override
 	public BillPayment addBillPayment(BillPayment billPayment, String uniqId) {
 
@@ -45,6 +48,10 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		if (user == null) {
 			throw new BillPaymentException("first you have to login..");
 		}
+		
+		if(user.getWallet().getBalance()<billPayment.getBillAmount()||user.getWallet().getBalance()==null) {
+			throw new InsufficientBalance("Insufficent Balance in Wallet");
+		}
 
 		BillPayment billPayment2 = new BillPayment();
 		billPayment2.setBillAmount(billPayment.getBillAmount());
@@ -52,9 +59,19 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		billPayment2.setBillType(billPayment.getBillType());
 		billPayment2.setUser(user);
 
+		
+		
+		Transaction transaction = new Transaction();
+		transaction.setTransactionAmount(billPayment.getBillAmount());
+		transaction.setTransationType(billPayment.getBillType());
+		transaction.setUser(user);
+		
+		user.getWallet().setBalance((user.getWallet().getBalance()-billPayment.getBillAmount()));
+		
+		//saveTransaction.addTransactionService(transaction)
 		bDao.save(billPayment2);
-
 		return billPayment;
+		//return transaction;
 	}
 
 	@Override
@@ -72,81 +89,15 @@ public class BillPaymentImpl implements BillPaymentIntr {
 
 		Wallet wallet = user.getWallet();
 
-		List<BillPayment> bills = bDao.findAll();
+		List<BillPayment> bills2 = bDao.findByUserId(user.getId());
+		
 		List<ViewBill> viewBills = new ArrayList<>();
 
-		for (BillPayment b : bills) {
-			if (b.getUser().getId().equals(user.getTransactions())) {
+		for (BillPayment b : bills2) {
 				viewBills.add(new ViewBill(b.getBillId(), b.getBillAmount(), b.getBillType(), wallet.getWalletId()));
-
-			}
 		}
 
 		return viewBills;
 	}
-
-	// Optional<CurrentSession> opt1 = curDao.findById(uniqId);
-//
-//		if (!opt1.isPresent()) {
-//			throw new BillPaymentException("first you have to login..");
-//		}
-//
-//		Optional<UserAccountDetails> user = rDao.findById(opt1.get().getUserId());
-//
-//		Optional<Wallet> opt = wDao.findById(user.get().getWallet().getWalletId());
-//
-//		List<BillPayment> totalbill = bDao.findAll();
-//
-////		System.out.println(totalbill);
-//		List<ViewBill> viewBill = new ArrayList<>();
-//		
-//
-//		for (BillPayment bill : totalbill) {
-//			
-//			if (bill.getWallet().getWalletId() == opt.get().getWalletId()) {
-//			
-//				ViewBill vBill = new ViewBill();
-//				vBill.setBillId(bill.getBillId());
-//				vBill.setBillAmount(bill.getBillAmount());
-//				vBill.setBillType(bill.getBillType());
-//				vBill.setWalletId(bill.getWallet().getWalletId());
-//				
-////				System.out.println(bill);
-////				bipy.getWallet().setWalletId(bill.getWallet().getWalletId());
-//				
-//				viewBill.add(vBill);
-//			}
-
 }
-
-//	private LoginDAL currentSessionDB;
-//
-//	@Autowired
-//	private RegisterUserDAL userDB;
-//
-//	@Autowired
-//	private TranscationController saveTransaction;
-//
-//	@Override
-//	public Transaction payBill(BillPayment bill, String uid) {
-//
-//		UserAccountDetails user = (userDB.findById((currentSessionDB.findById(uid).get()).getUserId())).get();
-//
-//		if (user == null) {
-//			throw new UserNotFindException("please Login first...");
-//		}
-//
-//		Transaction transaction = new Transaction();
-//
-//		Random random = new Random();
-//
-//		transaction.setTransactionId(Math.abs(random.nextInt() + 8769797));
-//
-////		transaction.setDescription(bill.getBillType() + " bill of amount " + bill.getBillAmount() + " " + " paid on "
-////				+ transaction.getLocalDateTime());
-//		transaction.setDescription("bill paid");
-//		transaction.setTransactionAmount(bill.getBillAmount());
-//		transaction.setTransationType(bill.getBillType());
-//		// transaction.setUser(user);
-//		return saveTransaction.addTransactionHandler(transaction, user.getId());
-//>>>>>>> 301c524c7a34a0bc97843cfddd56816b99590b7b
+	
