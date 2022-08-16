@@ -1,4 +1,4 @@
-package com.masai.LoginSignUp;
+package com.masai.userInput;
 
 import java.util.Objects;
 

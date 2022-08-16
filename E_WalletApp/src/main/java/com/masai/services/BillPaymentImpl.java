@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.LoginSignUp.CurrentSession;
 import com.masai.exceptions.BillPaymentException;
 import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BillPayment;
@@ -19,8 +18,7 @@ import com.masai.repositories.BillPaymentDAO;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveWalletDAL;
-
-import com.masai.servicesIntr.BillPaymentIntr;
+import com.masai.userInput.CurrentSession;
 
 @Service
 public class BillPaymentImpl implements BillPaymentIntr {

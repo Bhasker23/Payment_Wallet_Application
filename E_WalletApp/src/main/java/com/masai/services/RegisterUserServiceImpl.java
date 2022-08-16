@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import com.masai.repositories.SaveBeneficiaryDAL;
 import com.masai.repositories.SaveCustomerDAL;
 import com.masai.repositories.SaveTransactionDAL;
 import com.masai.repositories.SaveWalletDAL;
-import com.masai.servicesIntr.RegisterUserServiceIntr;
 import com.masai.userInput.Credentials;
 import com.masai.userInput.PasswordGenerator;
 import com.masai.userInput.UserInput;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.BankAccount;
-import com.masai.servicesImpl.BankAccountServicesImpl;
+import com.masai.services.BankAccountServicesImpl;
 
 @RestController
 @RequestMapping("/bank")

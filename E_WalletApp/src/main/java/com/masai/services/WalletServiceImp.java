@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.LoginSignUp.CurrentSession;
 import com.masai.exceptions.CustomerDoesNotExist;
 import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BankAccount;
@@ -20,7 +19,7 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.servicesIntr.WalletServiceIntr;
+import com.masai.userInput.CurrentSession;
 
 @Service
 

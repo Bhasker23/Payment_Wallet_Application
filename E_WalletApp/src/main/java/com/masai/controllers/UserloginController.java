@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.LoginSignUp.Login;
-import com.masai.servicesImpl.LoginUserServiceImpl;
+import com.masai.services.LoginUserServiceImpl;
+import com.masai.userInput.Login;
 
 @RestController
 @RequestMapping("/user")

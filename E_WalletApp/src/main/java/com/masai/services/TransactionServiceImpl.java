@@ -1,4 +1,4 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,7 +12,6 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveTransactionDAL;
-import com.masai.servicesIntr.TransactionServiceIntr;
 
 @Service
 public class TransactionServiceImpl implements TransactionServiceIntr {

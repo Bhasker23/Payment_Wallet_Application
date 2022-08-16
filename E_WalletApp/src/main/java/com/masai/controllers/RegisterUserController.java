@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.exceptions.UserInputInvalidException;
 import com.masai.models.UserAccountDetails;
-import com.masai.servicesImpl.RegisterUserServiceImpl;
+import com.masai.services.RegisterUserServiceImpl;
 import com.masai.userInput.UserInput;
 
 @RestController

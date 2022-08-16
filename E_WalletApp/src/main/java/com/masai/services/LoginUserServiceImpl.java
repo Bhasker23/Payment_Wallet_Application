@@ -1,18 +1,17 @@
-package com.masai.servicesImpl;
+package com.masai.services;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.LoginSignUp.CurrentSession;
-import com.masai.LoginSignUp.Login;
 import com.masai.exceptions.UserNotFindException;
 import com.masai.models.Customer;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.servicesIntr.LoginUserServicIntr;
 import com.masai.userInput.Credentials;
+import com.masai.userInput.CurrentSession;
+import com.masai.userInput.Login;
 import com.masai.userInput.PasswordGenerator;
 
 import net.bytebuddy.utility.RandomString;

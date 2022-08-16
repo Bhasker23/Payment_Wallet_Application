@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.CoustomerWithWallet;
@@ -16,9 +17,10 @@ import com.masai.models.Wallet;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.servicesImpl.WalletServiceImp;
+import com.masai.services.WalletServiceImp;
 
 @RestController
+@RequestMapping("/wallet")
 public class walletController {
 	
 	@Autowired
