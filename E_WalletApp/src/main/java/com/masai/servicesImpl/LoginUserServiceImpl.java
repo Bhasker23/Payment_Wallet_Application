@@ -57,10 +57,13 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 
 		String name = (currentUserDB.findById(uniqueId).get()).getName();
 
+<<<<<<< HEAD
 		currentUserDB.deleteById(uniqueId);
 
 		return name + " has been loged out.";
 
 	}
+=======
+>>>>>>> 8998d62cb27695b1561a25a0bfc38e53c5749e15
 
 }

@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+<<<<<<< HEAD
+processedSchemes=,eclipse+command,eclipse+mpc
+=======
+processedSchemes=,eclipse+mpc,eclipse+command
+>>>>>>> 301c524c7a34a0bc97843cfddd56816b99590b7b

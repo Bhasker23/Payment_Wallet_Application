@@ -8,13 +8,24 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+//<<<<<<< HEAD
+//import com.masai.exceptions.BillErrorDetails;
+//import com.masai.exceptions.BillPaymentException;
+//=======
 import com.masai.exceptions.BankAccountNotExsists;
 import com.masai.exceptions.BankAlreadyAdded;
+import com.masai.exceptions.CustomerDoesNotExist;
+//>>>>>>> 301c524c7a34a0bc97843cfddd56816b99590b7b
 import com.masai.exceptions.ExceptionDetails;
+import com.masai.exceptions.InsufficientBalance;
 import com.masai.exceptions.NotAnyBankAddedYet;
 import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.exceptions.UserInputInvalidException;
 import com.masai.exceptions.UserNotFindException;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8998d62cb27695b1561a25a0bfc38e53c5749e15
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,6 +51,35 @@ public class GlobalExceptionHandler {
 		exceptionDetails.setLocalDate(LocalDate.now());
 		return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
 	}
+//<<<<<<< HEAD
+//	
+//	@ExceptionHandler(BillPaymentException.class)
+//	public ResponseEntity<BillErrorDetails> billHandler1(BillPaymentException be, WebRequest wq){
+//		
+//		BillErrorDetails err = new BillErrorDetails();
+//		err.setTimestamp(LocalDate.now());
+//		err.setMessage(be.getMessage());
+//		err.setDetails(wq.getDescription(false));
+//		
+//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
+//		
+//	}
+//	
+//	@ExceptionHandler(NoHandlerFoundException.class)
+//	public ResponseEntity<BillErrorDetails> billHandler2(NoHandlerFoundException be, WebRequest wq){
+//		
+//		BillErrorDetails err = new BillErrorDetails();
+//		err.setTimestamp(LocalDate.now());
+//		err.setMessage(be.getMessage());
+//		err.setDetails(wq.getDescription(false));
+//		
+//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
+//		
+//	}
+//	
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr){
+//=======
 
 	@ExceptionHandler(UserNotFindException.class)
 	public ResponseEntity<ExceptionDetails> userNotFind(UserNotFindException ex, WebRequest wr) {
@@ -76,6 +116,26 @@ public class GlobalExceptionHandler {
 
 	}
 
+<<<<<<< HEAD
+=======
+	@ExceptionHandler(CustomerDoesNotExist.class)
+	public ResponseEntity<String> custDoesNotExist(CustomerDoesNotExist cde){
+		
+		return new ResponseEntity<String>(cde.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(InsufficientBalance.class)
+	public ResponseEntity<ExceptionDetails> insfBal( InsufficientBalance isb,WebRequest wr){
+		
+		ExceptionDetails exp = new ExceptionDetails();
+		exp.setMessage(isb.getMessage());
+		exp.setLocalDate(LocalDate.now());
+		exp.setDescription(wr.getDescription(false));
+		
+		return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
+	}
+
+>>>>>>> 8998d62cb27695b1561a25a0bfc38e53c5749e15
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr) {
 		ExceptionDetails exceptionDetails = new ExceptionDetails();
