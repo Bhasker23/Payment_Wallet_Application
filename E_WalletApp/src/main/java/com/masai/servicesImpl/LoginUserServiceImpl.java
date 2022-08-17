@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.LoginSignUp.CurrentSession;
 import com.masai.LoginSignUp.Login;
+import com.masai.exceptions.UserAlreadyExistException;
 import com.masai.exceptions.UserNotFindException;
 import com.masai.models.Customer;
 import com.masai.repositories.CurrentSessionDAL;
@@ -28,6 +29,8 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 	public String userLogin(Login logincred) {
 
 		Optional<Customer> opt = customerDB.findById(logincred.getUserid());
+		
+		
 
 		if (opt.isEmpty()) {
 			throw new UserNotFindException("Please signUp First..");
@@ -56,6 +59,7 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 
 	@Override
 	public String logOutUser( String uniqueId) {
+		
 		
 	 String name = (currentUserDB.findById(uniqueId).get()).getName();
 	
