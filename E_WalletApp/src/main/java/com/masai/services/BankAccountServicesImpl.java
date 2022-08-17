@@ -100,7 +100,7 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 	    Set<BankAccount> banks =  user.getBankAccounts();
 	    
 	    if(banks.isEmpty()) {
-	    	throw new NotAnyBankAddedYet("Not Any BankAccount Added Yet");
+	    	throw new BankAccountNotExsists("Not Any BankAccount Added Yet");
 	    }
 		
 		return banks;

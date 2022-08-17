@@ -59,7 +59,6 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 		
 	}
 
-
 	@Override
 	public String logOutUser( String uniqueId) {
 		

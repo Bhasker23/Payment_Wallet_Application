@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.masai.exceptions.CustomerDoesNotExist;
 import com.masai.exceptions.InsufficientBalance;
@@ -22,7 +23,7 @@ import com.masai.repositories.SaveCustomerDAL;
 import com.masai.userInput.CurrentSession;
 
 @Service
-
+@RequestMapping("/wallet")
 public class WalletServiceImp implements WalletServiceIntr {
 
 	@Autowired
@@ -285,16 +286,13 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("bank to wallet money transfer");
+		tr.setTransationType("Money Added to Wallet");
 		tr.setDescription("Rs " + amount + " has been added to your wallet");
 		tr.setUser(findUser);
 
-		// findUser.getTransactions().add(tr);
-		trasactionCurd.addTransactionService(tr);
-
+	    trasactionCurd.addTransactionService(tr);
 		regDao.save(findUser);
-
-
+		
 		return tr;
 	}
 

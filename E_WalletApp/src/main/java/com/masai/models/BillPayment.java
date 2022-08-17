@@ -31,7 +31,6 @@ public class BillPayment {
 	private Integer billId;
 	@Min(value = 10)
 	private Double billAmount;
-	@Size(min = 3)
 	private String billType;
 
 	@ManyToOne(cascade = CascadeType.ALL)

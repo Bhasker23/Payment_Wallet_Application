@@ -11,11 +11,6 @@ import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.models.Wallet;
 import com.masai.repositories.RegisterUserDAL;
-import com.masai.repositories.SaveBankAccDAL;
-import com.masai.repositories.SaveBeneficiaryDAL;
-import com.masai.repositories.SaveCustomerDAL;
-import com.masai.repositories.SaveTransactionDAL;
-import com.masai.repositories.SaveWalletDAL;
 import com.masai.userInput.Credentials;
 import com.masai.userInput.PasswordGenerator;
 import com.masai.userInput.UserInput;
@@ -25,21 +20,6 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 	@Autowired
 	private RegisterUserDAL userDB;
-
-	@Autowired
-	private SaveCustomerDAL customerDB;
-
-	@Autowired
-	private SaveBankAccDAL bankaccDB;
-
-	@Autowired
-	private SaveBeneficiaryDAL beneficiaryDB;
-
-	@Autowired
-	private SaveTransactionDAL transactionDB;
-
-	@Autowired
-	private SaveWalletDAL walletDB;
 
 	@Autowired
 	private PasswordGenerator passGenerater;
@@ -56,13 +36,6 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 		customer.setName(input.getName());
 		customer.setPhone(input.getPhone());
 		customer.setPassword(passGenerater.getPass(new Credentials(input.getPhone(),input.getPassword())));
-		
-	    BankAccount bankAccount = new BankAccount();
-	    
-	    BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
-	    
-
-	    Transaction transaction = new Transaction();
 	    
 	    Wallet wallet = new Wallet();
 	    

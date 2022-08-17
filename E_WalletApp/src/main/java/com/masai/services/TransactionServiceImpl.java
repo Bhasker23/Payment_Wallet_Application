@@ -29,11 +29,9 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	@Override
 	public Transaction addTransactionService(Transaction transaction) {
 
-		UserAccountDetails users = transaction.getUser();
-
-		users.getTransactions().add(transaction);
-
-		registerUserDAL.save(users);
+     	UserAccountDetails users = transaction.getUser();
+     	users.getTransactions().add(transaction);
+      	registerUserDAL.save(users);
 		return transaction;
 	}
 

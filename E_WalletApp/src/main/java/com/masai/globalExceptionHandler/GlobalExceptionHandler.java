@@ -48,35 +48,6 @@ public class GlobalExceptionHandler {
 		exceptionDetails.setLocalDate(LocalDate.now());
 		return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
 	}
-//<<<<<<< HEAD
-//	
-//	@ExceptionHandler(BillPaymentException.class)
-//	public ResponseEntity<BillErrorDetails> billHandler1(BillPaymentException be, WebRequest wq){
-//		
-//		BillErrorDetails err = new BillErrorDetails();
-//		err.setTimestamp(LocalDate.now());
-//		err.setMessage(be.getMessage());
-//		err.setDetails(wq.getDescription(false));
-//		
-//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
-//		
-//	}
-//	
-//	@ExceptionHandler(NoHandlerFoundException.class)
-//	public ResponseEntity<BillErrorDetails> billHandler2(NoHandlerFoundException be, WebRequest wq){
-//		
-//		BillErrorDetails err = new BillErrorDetails();
-//		err.setTimestamp(LocalDate.now());
-//		err.setMessage(be.getMessage());
-//		err.setDetails(wq.getDescription(false));
-//		
-//		return new ResponseEntity<BillErrorDetails>(err, HttpStatus.BAD_REQUEST);
-//		
-//	}
-//	
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr){
-//=======
 
 	@ExceptionHandler(UserNotFindException.class)
 	public ResponseEntity<ExceptionDetails> userNotFind(UserNotFindException ex, WebRequest wr) {
@@ -131,6 +102,16 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
 	}
+	
+//	@ExceptionHandler(NotAnyBankAddedYet.class)
+//	public ResponseEntity<ExceptionDetails> notAnyBankAdded(NotAnyBankAddedYet ex,WebRequest wr){
+//		ExceptionDetails exp = new ExceptionDetails();
+//		exp.setMessage(ex.getMessage());
+//		exp.setLocalDate(LocalDate.now());
+//		exp.setDescription(wr.getDescription(false));
+//		
+//		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr) {
