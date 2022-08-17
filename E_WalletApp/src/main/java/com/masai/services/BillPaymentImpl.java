@@ -3,6 +3,7 @@ package com.masai.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,9 @@ public class BillPaymentImpl implements BillPaymentIntr {
 
 	@Autowired
 	private TransactionServiceImpl saveTransaction;
-	
+
+	Random random = new Random();
+
 	@Override
 	public BillPayment addBillPayment(BillPayment billPayment, String uniqId) {
 
@@ -46,8 +49,8 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		if (user == null) {
 			throw new BillPaymentException("first you have to login..");
 		}
-		
-		if(user.getWallet().getBalance()<billPayment.getBillAmount()||user.getWallet().getBalance()==null) {
+
+		if (user.getWallet().getBalance() < billPayment.getBillAmount() || user.getWallet().getBalance() == null) {
 			throw new InsufficientBalance("Insufficent Balance in Wallet");
 		}
 
@@ -57,20 +60,19 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		billPayment2.setBillType(billPayment.getBillType());
 		billPayment2.setUser(user);
 
-		
-		
 		Transaction transaction = new Transaction();
 
+		transaction.setTransactionId(random.nextInt());
 		transaction.setTransactionAmount(billPayment.getBillAmount());
 		transaction.setTransationType(billPayment.getBillType());
 		transaction.setUser(user);
-		
-		user.getWallet().setBalance((user.getWallet().getBalance()-billPayment.getBillAmount()));
-		
+
+		user.getWallet().setBalance((user.getWallet().getBalance() - billPayment.getBillAmount()));
+
 		saveTransaction.addTransactionService(transaction);
 		bDao.save(billPayment2);
 		return billPayment;
-		//return transaction;
+		// return transaction;
 
 	}
 
@@ -90,14 +92,13 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		Wallet wallet = user.getWallet();
 
 		List<BillPayment> bills2 = bDao.findByUserId(user.getId());
-		
+
 		List<ViewBill> viewBills = new ArrayList<>();
 
 		for (BillPayment b : bills2) {
-				viewBills.add(new ViewBill(b.getBillId(), b.getBillAmount(), b.getBillType(), wallet.getWalletId()));
+			viewBills.add(new ViewBill(b.getBillId(), b.getBillAmount(), b.getBillType(), wallet.getWalletId()));
 		}
 
 		return viewBills;
 	}
 }
-	

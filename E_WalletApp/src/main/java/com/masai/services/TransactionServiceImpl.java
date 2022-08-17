@@ -34,6 +34,7 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 		users.getTransactions().add(transaction);
 
 		registerUserDAL.save(users);
+		// saveTransactionDAL.saveAndFlush(transaction);
 		return transaction;
 	}
 
