@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.BankAccount;
+import com.masai.models.Customer;
 import com.masai.services.BankAccountServicesImpl;
 
 @RestController
@@ -26,9 +27,9 @@ public class BankAccountController {
 	private BankAccountServicesImpl curd;
 
 	@PostMapping("/addAccount/{uniqueId}")
-      public ResponseEntity<BankAccount> addBankAccount(@PathVariable String uniqueId,@RequestBody BankAccount bankAccount){
+      public ResponseEntity<BankAccount> addBankAccount(@RequestBody BankAccount bankAccount,@PathVariable String uniqueId ){
 	     	BankAccount aaccountAdded = curd.addBank(bankAccount,uniqueId);
-         	return new ResponseEntity<>(bankAccount,HttpStatus.ACCEPTED);   
+         	return new ResponseEntity<>(bankAccount,HttpStatus.ACCEPTED); 
        }
 	
 	@DeleteMapping("/removeBankAccount/{uniqueId}")

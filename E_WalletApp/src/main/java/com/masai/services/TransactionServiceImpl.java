@@ -2,16 +2,19 @@ package com.masai.services;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.exceptions.UserNotLogedinException;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveTransactionDAL;
+import com.masai.userInput.CurrentSession;
 
 @Service
 public class TransactionServiceImpl implements TransactionServiceIntr {
@@ -38,10 +41,16 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 //==========================================================================================
 	@Override
 	public Set<Transaction> displayAllTransactionsSevice(String uniqueID) {
+		System.out.println(uniqueID);
 
-		UserAccountDetails user = registerUserDAL.findById((currentSessionDB.findById(uniqueID).get()).getUserId())
-				.get();
-
+		Optional<CurrentSession> currentSessionOp = currentSessionDB.findById(uniqueID);
+		
+		if(currentSessionOp.isEmpty()) {
+			throw new UserNotLogedinException("You are not loged in");
+		}
+	
+		UserAccountDetails user = registerUserDAL.findById(currentSessionOp.get().getUserId()).get();
+		
 		return user.getTransactions();
 	}
 

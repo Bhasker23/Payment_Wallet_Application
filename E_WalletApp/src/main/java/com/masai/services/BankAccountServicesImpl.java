@@ -1,5 +1,6 @@
 package com.masai.services;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,24 +31,20 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 	@Override
 	public BankAccount addBank(BankAccount bankAccount, String uniqueId) throws UserNotLogedinException,BankAlreadyAdded {
 		
-		System.out.println("0000");
-		
 		UserAccountDetails user = userDB.findById((loginDb.findById(uniqueId).get()).getUserId()).get();
 		
-		System.out.println("111");
 		if(user==null) {
 			throw new UserNotLogedinException("Please Login first");
 		}
 		
-		System.out.println("222");
+		
 		if((bankDetrailsDb.findById(bankAccount.getAccountNumber())).isPresent()) {
 			throw new BankAlreadyAdded("Bank with "+bankAccount.getAccountNumber()+" this Account Nuber Already Exist");
 		}
-		System.out.println("333");
+		
 		bankAccount.setUser(user);
 		user.getBankAccounts().add(bankAccount);
 		
-		System.out.println("444");
 		userDB.save(user);
 		return bankAccount;
 	}
@@ -66,9 +63,13 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 		
 		BankAccount removedBankAccount = bankDetrailsDb.findById(accountNumber).get(); 
 		
-		bankDetrailsDb.deleteById(removedBankAccount.getAccountNumber());
+		System.out.println(removedBankAccount.getAccountNumber());
+		System.out.println(user.getBankAccounts().size());
+		if(!user.getBankAccounts().contains(removedBankAccount)) {
+			throw new BankAccountNotExsists("Bank with "+accountNumber+" Account Number does not present");
+		}
 		
-		userDB.save(user);
+		bankDetrailsDb.delete(removedBankAccount);
 		
 		return removedBankAccount;
 	}
@@ -81,6 +82,7 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 		}
 		
 		BankAccount bankAccount = bankDetrailsDb.findById(accountNumber).get();
+	
 
 		if(!user.getBankAccounts().contains(bankAccount)) {
 			throw new BankAccountNotExsists("Bank with "+accountNumber+" this Account Nuber not Exist");

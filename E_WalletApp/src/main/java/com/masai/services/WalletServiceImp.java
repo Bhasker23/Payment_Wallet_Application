@@ -20,7 +20,9 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
+import com.masai.userInput.Credentials;
 import com.masai.userInput.CurrentSession;
+import com.masai.userInput.PasswordGenerator;
 
 @Service
 @RequestMapping("/wallet")
@@ -28,6 +30,9 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 	@Autowired
 	private TransactionServiceImpl trasactionCurd;
+	
+	@Autowired
+	private PasswordGenerator passGenerater;
 
 	Random random = new Random();
 
@@ -215,8 +220,10 @@ public class WalletServiceImp implements WalletServiceIntr {
 		UserAccountDetails user = regDao.getById(csc.getUserId());
 
 		user.getCustomer().setName(cus.getName());
+		
+		String password = passGenerater.getPass(new Credentials(user.getCustomer().getName(),user.getCustomer().getPassword()));
 
-		user.getCustomer().setPassword(cus.getPassword());
+		user.getCustomer().setPassword(password);
 
 		regDao.save(user);
 
