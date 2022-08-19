@@ -120,14 +120,14 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("Amount transfer to Beneficiary");
-		tr.setDescription("Rs " + amount + " has been send to "+targetMobileNumber);
-        tr.setUser(sourceUser);
-		//findUser.getTransactions().add(tr);
+		tr.setTransationType("Money Transfer");
+		tr.setDescription("Rs " + amount + " has been send to " + targetMobileNumber);
+		tr.setUser(sourceUser);
+		// findUser.getTransactions().add(tr);
 		trasactionCurd.addTransactionService(tr);
-		
+
 		regDao.save(sourceUser);
-		
+
 		regDao.save(targetUser);
 
 		return tr;
@@ -182,7 +182,7 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("Wallet to Bank Account money transfer");
+		tr.setTransationType("Wallet to Bank");
 		tr.setDescription("Rs " + amount + " has been added to your Bank");
 		tr.setUser(user);
 
@@ -293,13 +293,15 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
+
 		tr.setTransationType("Money Added to Wallet");
+
 		tr.setDescription("Rs " + amount + " has been added to your wallet");
 		tr.setUser(findUser);
 
 	    trasactionCurd.addTransactionService(tr);
 		regDao.save(findUser);
-		
+
 		return tr;
 	}
 

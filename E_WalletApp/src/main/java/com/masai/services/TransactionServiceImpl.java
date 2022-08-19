@@ -1,6 +1,8 @@
 package com.masai.services;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -32,9 +34,11 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	@Override
 	public Transaction addTransactionService(Transaction transaction) {
 
+
      	UserAccountDetails users = transaction.getUser();
      	users.getTransactions().add(transaction);
       	registerUserDAL.save(users);
+
 		return transaction;
 	}
 
@@ -77,8 +81,10 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 	@Override
 	public Set<Transaction> getTransactionsBetweenDateRangeService(String uniqueID, String from, String to) {
 
-		LocalDate start = LocalDate.parse(from);
-		LocalDate end = LocalDate.parse(to);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+		LocalDate start = LocalDate.parse(from, formatter);
+		LocalDate end = LocalDate.parse(to, formatter);
 
 		Set<Transaction> allTransactions = (registerUserDAL
 				.findById(currentSessionDB.findById(uniqueID).get().getUserId()).get()).getTransactions();
@@ -87,14 +93,15 @@ public class TransactionServiceImpl implements TransactionServiceIntr {
 
 		for (Transaction transaction : allTransactions) {
 
-			String s = start.getYear() + "" + start.getMonthValue() + "" + "" + start.getDayOfMonth();
-			String e = end.getYear() + "" + end.getMonthValue() + "" + "" + end.getDayOfMonth();
+			LocalDateTime localDateTime = transaction.getLocalDateTime();
+			String date = localDateTime.getDayOfMonth() + "-0" + localDateTime.getMonthValue() + "-"
+					+ localDateTime.getYear();
+			LocalDate temp = LocalDate.parse(date, formatter);
 
-			// System.out.println(s.compareTo(e));
-
-			if (s.compareTo(e) <= 0 && s.compareTo(s) > 0) {
+			if ((temp.isAfter(start) && temp.isBefore(end)) || temp.equals(start) || temp.equals(end)) {
 				byDateRangeTransactions.add(transaction);
 			}
+
 		}
 
 		return byDateRangeTransactions;
