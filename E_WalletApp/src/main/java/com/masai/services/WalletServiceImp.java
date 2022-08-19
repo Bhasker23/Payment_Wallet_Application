@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.masai.exceptions.CustomerDoesNotExist;
 import com.masai.exceptions.InsufficientBalance;
@@ -19,14 +20,19 @@ import com.masai.models.UserAccountDetails;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
+import com.masai.userInput.Credentials;
 import com.masai.userInput.CurrentSession;
+import com.masai.userInput.PasswordGenerator;
 
 @Service
-
+@RequestMapping("/wallet")
 public class WalletServiceImp implements WalletServiceIntr {
 
 	@Autowired
 	private TransactionServiceImpl trasactionCurd;
+	
+	@Autowired
+	private PasswordGenerator passGenerater;
 
 	Random random = new Random();
 
@@ -214,8 +220,10 @@ public class WalletServiceImp implements WalletServiceIntr {
 		UserAccountDetails user = regDao.getById(csc.getUserId());
 
 		user.getCustomer().setName(cus.getName());
+		
+		String password = passGenerater.getPass(new Credentials(user.getCustomer().getName(),user.getCustomer().getPassword()));
 
-		user.getCustomer().setPassword(cus.getPassword());
+		user.getCustomer().setPassword(password);
 
 		regDao.save(user);
 
@@ -285,13 +293,13 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("Add to Wallet");
+
+		tr.setTransationType("Money Added to Wallet");
+
 		tr.setDescription("Rs " + amount + " has been added to your wallet");
 		tr.setUser(findUser);
 
-		// findUser.getTransactions().add(tr);
-		trasactionCurd.addTransactionService(tr);
-
+	    trasactionCurd.addTransactionService(tr);
 		regDao.save(findUser);
 
 		return tr;
