@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 public class BeneficiaryDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+//	private Integer id;
 	@Pattern(regexp = "^[6-9][0-9]{9}",message = "Invaild Phone Number")
 	private String phoneNumber;
 	@Size(min = 3,max = 20)

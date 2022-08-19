@@ -8,7 +8,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.exceptions.CustomerDoesNotExist;
+import com.masai.exceptions.BankAccountNotAdded;
+import com.masai.exceptions.BankAccountNotExsists;
+import com.masai.exceptions.BeneficiaryNotAdded;
+import com.masai.exceptions.BeneficiaryNotExist;
+import com.masai.exceptions.BeneficiaryNotFound;
 import com.masai.exceptions.InsufficientBalance;
 import com.masai.models.BankAccount;
 import com.masai.models.BeneficiaryDetails;
@@ -16,8 +20,10 @@ import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
+import com.masai.repositories.BeneficiaryDetailsDao;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
+import com.masai.repositories.SaveBankAccDAL;
 import com.masai.repositories.SaveCustomerDAL;
 import com.masai.userInput.CurrentSession;
 
@@ -28,19 +34,33 @@ public class WalletServiceImp implements WalletServiceIntr {
 	@Autowired
 	private TransactionServiceImpl trasactionCurd;
 
+	@Autowired
+	private SaveBankAccDAL bankRepo;
+
+	@Autowired
+	private RegisterUserDAL regDao;
+
+	@Autowired
+	private CurrentSessionDAL csDal;
+
+	@Autowired
+	private SaveCustomerDAL cusDep;
+	
+	@Autowired
+	private BeneficiaryDetailsDao benefiREpo;
+
 	Random random = new Random();
 
 	@Override
-	public CoustomerWithWallet showBalanceInWallet(RegisterUserDAL regDao, CurrentSessionDAL csDal, String unqId) {
+	public CoustomerWithWallet showBalanceInWallet(String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> opt = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!opt.isPresent()) {
+			throw new BeneficiaryNotFound("you are not login");
 		}
 
-		Optional<UserAccountDetails> userAccountDeatil = regDao.findById(csc.getUserId());
+		Optional<UserAccountDetails> userAccountDeatil = regDao.findById(opt.get().getUserId());
 
 		UserAccountDetails userActDel = userAccountDeatil.get();
 
@@ -57,35 +77,31 @@ public class WalletServiceImp implements WalletServiceIntr {
 	}
 
 	@Override
-	public Transaction fundTransferFromOneWalletToOtherWallet(String targetMobileNumber, Double amount,
-			RegisterUserDAL regDao, CurrentSessionDAL csDal, String unqId) {
+	public Transaction fundTransferFromOneWalletToOtherWallet(String targetMobileNumber, Double amount, String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> opt = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!opt.isPresent()) {
+			throw new BeneficiaryNotFound("you are not login");
+		}
+		
+		
+		Optional<BeneficiaryDetails> benefiOpt=benefiREpo.findById(targetMobileNumber);
+		
+		if(!benefiOpt.isPresent()) {
+			
+			throw new BeneficiaryNotExist("Beneficiary Not Exist");
 		}
 
-		UserAccountDetails sourceUser = regDao.getById(csc.getUserId());
+		UserAccountDetails sourceUser = regDao.getById(opt.get().getUserId());
 
 		Set<BeneficiaryDetails> bdSet = sourceUser.getBeneficiaryDetails();
-
-		boolean f = true;
-		for (BeneficiaryDetails bn : bdSet) {
-
-			if (bn.getPhoneNumber().equals(targetMobileNumber)) {
-				f = false;
-				break;
-			}
+		
+		if(!bdSet.contains(benefiOpt.get())) {
+			
+			throw new BeneficiaryNotAdded("Beneficiary Not Added");
 		}
-
-		if (f) {
-
-			throw new CustomerDoesNotExist("Target mobile number does not added in Beneficiary list");
-		}
-
-		UserAccountDetails targetUser = regDao.getById(targetMobileNumber);
+		
 
 		if (sourceUser.getWallet().getBalance() == null) {
 
@@ -98,6 +114,10 @@ public class WalletServiceImp implements WalletServiceIntr {
 		}
 
 		sourceUser.getWallet().setBalance(sourceUser.getWallet().getBalance() - amount);
+		
+		regDao.save(sourceUser);
+		
+		UserAccountDetails targetUser = regDao.getById(targetMobileNumber);
 
 		if (targetUser.getWallet().getBalance() == null) {
 
@@ -108,42 +128,43 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		}
 
+		regDao.save(targetUser);
+		
+		
 		Transaction tr = new Transaction();
 
 		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("Amount transfer to Beneficiary");
-		tr.setDescription("Rs " + amount + " has been send to "+targetMobileNumber);
-        tr.setUser(sourceUser);
-		//findUser.getTransactions().add(tr);
+		tr.setTransationType("Amount transfer");
+		tr.setDescription("Rs " + amount + " has been send to " + targetMobileNumber);
+		tr.setUser(sourceUser);
+		// findUser.getTransactions().add(tr);
 		trasactionCurd.addTransactionService(tr);
-		
-		regDao.save(sourceUser);
-		
-		regDao.save(targetUser);
 
 		return tr;
 	}
 
 	@Override
-	public Transaction depostAmountFromWalletToBankAccount(double amount, RegisterUserDAL regDao,
-			CurrentSessionDAL csDal, String unqId) {
+	public Transaction depostAmountFromWalletToBankAccount(BankAccount bk, double amount, String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> opt = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!opt.isPresent()) {
+			throw new BeneficiaryNotFound("you are not login");
 		}
 
-		UserAccountDetails user = regDao.getById(csc.getUserId());
+		// bank account find
 
-		if (user.getBankAccounts().size() == 0) {
+		Optional<BankAccount> bkOpt = bankRepo.findById(bk.getAccountNumber());
 
-			throw new CustomerDoesNotExist("Bank Account not added first add the bank account");
+		if (bkOpt.isEmpty()) {
+
+			throw new BankAccountNotExsists("Bank account Not Exist");
 		}
+
+		UserAccountDetails user = regDao.getById(opt.get().getUserId());
 
 		if (user.getWallet().getBalance() == null) {
 
@@ -154,21 +175,20 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 			throw new InsufficientBalance("In your wallet Insufficient Balance");
 		}
+		
+
+		if (!user.getBankAccounts().contains(bkOpt.get())) {
+
+			throw new BankAccountNotAdded("Bank Account Not link to Wallet");
+		}
 
 		user.getWallet().setBalance(user.getWallet().getBalance() - amount);
 
-		Set<BankAccount> bkSet = user.getBankAccounts();
+		BankAccount bnkAccount = bkOpt.get();
 
-		for (BankAccount bk : bkSet) {
-
-			if (bk.getAccountNumber() != null) {
-
-				bk.setBalance(bk.getBalance() + amount);
-
-				break;
-			}
-
-		}
+		bnkAccount.setBalance(bnkAccount.getBalance() + amount);
+		
+		regDao.save(user);
 
 		Transaction tr = new Transaction();
 
@@ -176,48 +196,46 @@ public class WalletServiceImp implements WalletServiceIntr {
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("Wallet to Bank Account money transfer");
+		tr.setTransationType("WalletToBank");
 		tr.setDescription("Rs " + amount + " has been added to your Bank");
 		tr.setUser(user);
 
-		// findUser.getTransactions().add(tr);
 		trasactionCurd.addTransactionService(tr);
-
-		regDao.save(user);
 
 		return tr;
 	}
 
 	@Override
-	public List<Customer> getAllCustomer(SaveCustomerDAL cusDep, CurrentSessionDAL csDal, String unqId) {
+	public List<Customer> getAllCustomer(String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> opt = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!opt.isPresent()) {
+			
+			throw new BeneficiaryNotFound("you are not login");
 		}
 
 		return cusDep.findAll();
 	}
 
 	@Override
-	public Customer updateCustomer(Customer cus, RegisterUserDAL regDao, CurrentSessionDAL csDal, String unqId) {
+	public Customer updateCustomer(Customer cus, String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> opt = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!opt.isPresent()) {
+			throw new BeneficiaryNotFound("you are not login");
 		}
 
-		UserAccountDetails user = regDao.getById(csc.getUserId());
+		UserAccountDetails user = regDao.getById(opt.get().getUserId());
 
 		user.getCustomer().setName(cus.getName());
 
 		user.getCustomer().setPassword(cus.getPassword());
 
 		regDao.save(user);
+		
+		CurrentSession csc=opt.get();
 
 		csc.setUserId(cus.getPhone());
 
@@ -227,49 +245,40 @@ public class WalletServiceImp implements WalletServiceIntr {
 	}
 
 	@Override
-	public Transaction addMoneyIntoWalletFromBankAccount(double amount, RegisterUserDAL regDao, CurrentSessionDAL csDal,
-			String unqId) {
+	public Transaction addMoneyIntoWalletFromBankAccount(BankAccount bk, double amount, String unqId) {
 
-		CurrentSession csc = csDal.getById(unqId);
+		Optional<CurrentSession> optcs = csDal.findById(unqId);
 
-		if (csc == null) {
-
-			throw new CustomerDoesNotExist("you are not sign in");
+		if (!optcs.isPresent()) {
+			throw new BeneficiaryNotFound("you are not login");
 		}
 
-		Optional<UserAccountDetails> opt = regDao.findById(csc.getUserId());
+		Optional<BankAccount> bkOpt = bankRepo.findById(bk.getAccountNumber());
+
+		if (bkOpt.isEmpty()) {
+
+			throw new BankAccountNotExsists("Bank account Not Exist");
+		}
+
+		Optional<UserAccountDetails> opt = regDao.findById(optcs.get().getUserId());
 
 		UserAccountDetails findUser = opt.get();
 
-		Set<BankAccount> bks = findUser.getBankAccounts();
+		if (!findUser.getBankAccounts().contains(bkOpt.get())) {
 
-		if (bks.size() == 0) {
-
-			throw new CustomerDoesNotExist("Bank account not added");
+			throw new BankAccountNotAdded("Bank Account Not link to Wallet");
 		}
 
-		boolean b2 = true;
+		if (bkOpt.get().getBalance() < amount) {
 
-		for (BankAccount bk : bks) {
-
-			if (bk.getAccountNumber() != null) {
-
-				if (bk.getBalance() >= amount) {
-
-					bk.setBalance(bk.getBalance() - amount);
-
-					b2 = false;
-
-					break;
-				}
-
-			}
-
-		}
-
-		if (b2) {
 			throw new InsufficientBalance("Insufficient Balance in Bank Account");
 		}
+
+		BankAccount bkAccount = bkOpt.get();
+
+		bkAccount.setBalance(bkAccount.getBalance() - amount);
+
+		bankRepo.save(bkAccount);
 
 		if (findUser.getWallet().getBalance() == null) {
 
@@ -279,21 +288,20 @@ public class WalletServiceImp implements WalletServiceIntr {
 			findUser.getWallet().setBalance(findUser.getWallet().getBalance() + amount);
 		}
 
+		regDao.save(findUser);
+
 		Transaction tr = new Transaction();
 
 		tr.setTransactionId(Math.abs(random.nextInt() + 8769797));
 
 		tr.setTransactionAmount(amount);
 
-		tr.setTransationType("bank to wallet money transfer");
+		tr.setTransationType("Wallet Added");
 		tr.setDescription("Rs " + amount + " has been added to your wallet");
 		tr.setUser(findUser);
 
 		// findUser.getTransactions().add(tr);
 		trasactionCurd.addTransactionService(tr);
-
-		regDao.save(findUser);
-
 
 		return tr;
 	}

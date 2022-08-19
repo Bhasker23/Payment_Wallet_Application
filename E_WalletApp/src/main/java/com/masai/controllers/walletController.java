@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.masai.models.BankAccount;
 import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Transaction;
@@ -23,28 +24,16 @@ import com.masai.services.WalletServiceImp;
 @RequestMapping("/wallet")
 public class walletController {
 	
-	@Autowired
-	private RegisterUserDAL regDao;
-	
-	@Autowired
-	private SaveCustomerDAL cusDep;
 	
 	@Autowired
 	WalletServiceImp imp;
-	
-	@Autowired
-	CurrentSessionDAL csDal;
-	
-	
-	
-	
+
+		
 
 	@GetMapping("/balance/{unqId}")
 	public CoustomerWithWallet showBalance(@PathVariable String unqId) {
 
-		System.out.println(regDao);
-
-		return imp.showBalanceInWallet(regDao, csDal,unqId);
+		return imp.showBalanceInWallet(unqId);
 	}
 	
 	
@@ -54,7 +43,7 @@ public class walletController {
 	@PutMapping("/fundTransfer/{tNumber}/{amount}/{unqId}")
 	public Transaction fundTf(@PathVariable String tNumber, @PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.fundTransferFromOneWalletToOtherWallet( tNumber, amount, regDao, csDal, unqId);
+		return imp.fundTransferFromOneWalletToOtherWallet( tNumber, amount, unqId);
 	}
 	
 	
@@ -62,9 +51,9 @@ public class walletController {
 	
 	
 	@PutMapping("/depositAmount/{amount}/{unqId}")
-	public Transaction depositAmountInWallet(@PathVariable double amount,@PathVariable String unqId) {
+	public Transaction depositAmountInWallet(@RequestBody BankAccount bk,@PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.depostAmountFromWalletToBankAccount(amount, regDao, csDal, unqId);
+		return imp.depostAmountFromWalletToBankAccount(bk,amount, unqId);
 	}
 	
 	
@@ -73,7 +62,7 @@ public class walletController {
 	@GetMapping("/customers/{unqId}")
 	public List<Customer> getAllCustomer(@PathVariable String unqId){
 		
-		return imp.getAllCustomer(cusDep, csDal, unqId);
+		return imp.getAllCustomer( unqId);
 	}
 	
 	
@@ -82,14 +71,14 @@ public class walletController {
 	@PutMapping("/updateCustomer/{unqId}")
 	public Customer updateCustomer(@RequestBody Customer cus,@PathVariable String unqId) {
 		
-		return imp.updateCustomer(cus, regDao, csDal, unqId);
+		return imp.updateCustomer(cus, unqId);
 	}
 	
 	
 	@PutMapping("/addMoney/{amount}/{unqId}")
-	public Transaction addMoneyIntoWallet(@PathVariable double amount,@PathVariable String unqId) {
+	public Transaction addMoneyIntoWallet(@RequestBody BankAccount bk,@PathVariable double amount,@PathVariable String unqId) {
 		
-		return imp.addMoneyIntoWalletFromBankAccount(amount, regDao, csDal, unqId);
+		return imp.addMoneyIntoWalletFromBankAccount(bk,amount,unqId);
 	}
 	
 }
