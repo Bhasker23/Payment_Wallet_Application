@@ -35,5 +35,6 @@ public class UserloginController {
 		return new ResponseEntity<>(curd.logOutUser(uniqueId) , HttpStatus.OK); 
 	}
 	
+	
 
 }
