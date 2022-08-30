@@ -23,7 +23,7 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 	@Autowired
 	private PasswordGenerator passGenerater;
-	
+
 	@Override
 	public UserAccountDetails registerUser(UserInput input) {
 
@@ -35,21 +35,29 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 
 		customer.setName(input.getName());
 		customer.setPhone(input.getPhone());
-		customer.setPassword(passGenerater.getPass(new Credentials(input.getPhone(),input.getPassword())));
-	    
-	    Wallet wallet = new Wallet();
-	    
-	    UserAccountDetails userAccountDetails = new UserAccountDetails();
-	    
-	    userAccountDetails.setId(customer.getPhone());
-	    userAccountDetails.setCustomer(customer);
-	    userAccountDetails.setWallet(wallet);
-        
-	    wallet.setUser(userAccountDetails);
-	    customer.setUser(userAccountDetails);
-	    userDB.save(userAccountDetails);
-	    
-	    userAccountDetails.getCustomer().setPassword(input.getPassword());
-	    return userAccountDetails;
+
+		customer.setPassword(passGenerater.getPass(new Credentials(input.getPhone(), input.getPassword())));
+
+		BankAccount bankAccount = new BankAccount();
+
+		BeneficiaryDetails beneficiaryDetails = new BeneficiaryDetails();
+
+		Transaction transaction = new Transaction();
+
+		Wallet wallet = new Wallet();
+
+		UserAccountDetails userAccountDetails = new UserAccountDetails();
+
+		userAccountDetails.setId(customer.getPhone());
+		userAccountDetails.setCustomer(customer);
+		userAccountDetails.setWallet(wallet);
+
+		wallet.setUser(userAccountDetails);
+		customer.setUser(userAccountDetails);
+		UserAccountDetails savedUser = userDB.save(userAccountDetails);
+
+		userAccountDetails.getCustomer().setPassword(input.getPassword());
+		savedUser.getCustomer().setPassword(input.getPassword());
+		return savedUser;
 	}
 }
