@@ -37,11 +37,10 @@ public class BeneficiaryDetailsImpl implements BenificiaryDetailsServiceIntr {
 			throw new BeneficiaryNotFound("you are not login");
 		}
 
-		Optional<UserAccountDetails> uacd = dal.findById(beneficiaryDetails.getPhoneNumber());
+		Optional<UserAccountDetails> uacd = dal.findById(opt.get().getUserId());
 		
-		System.out.println("1111");
-
-		if (!uacd.isPresent()) {
+		
+		if (uacd.isEmpty()) {
 
 			throw new BeneficiaryNotFound("beneficiary user not register");
 		}
@@ -51,12 +50,12 @@ public class BeneficiaryDetailsImpl implements BenificiaryDetailsServiceIntr {
 		System.out.println("22222");
 
 		UserAccountDetails userAccountDetails = user.get();
-
+		
+        beneficiaryDetails.setUser(userAccountDetails);
+        
 		userAccountDetails.getBeneficiaryDetails().add(beneficiaryDetails);
 
 		dal.save(userAccountDetails);
-		
-		System.out.println("3333");
 
 		return beneficiaryDetails;
 	}

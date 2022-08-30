@@ -60,11 +60,16 @@ public class BillPaymentImpl implements BillPaymentIntr {
 		billPayment2.setBillType(billPayment.getBillType());
 		billPayment2.setUser(user);
 
+
+		
+		Random random = new Random();
+
 		Transaction transaction = new Transaction();
 
 		transaction.setTransactionId(random.nextInt());
 		transaction.setTransactionAmount(billPayment.getBillAmount());
 		transaction.setTransationType(billPayment.getBillType());
+		transaction.setDescription(transaction.getTransationType()+" BIll Paid");
 		transaction.setUser(user);
 
 		user.getWallet().setBalance((user.getWallet().getBalance() - billPayment.getBillAmount()));

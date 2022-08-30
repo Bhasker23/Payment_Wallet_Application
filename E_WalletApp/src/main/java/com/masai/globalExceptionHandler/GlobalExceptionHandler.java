@@ -94,6 +94,16 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
 	}
+	
+//	@ExceptionHandler(NotAnyBankAddedYet.class)
+//	public ResponseEntity<ExceptionDetails> notAnyBankAdded(NotAnyBankAddedYet ex,WebRequest wr){
+//		ExceptionDetails exp = new ExceptionDetails();
+//		exp.setMessage(ex.getMessage());
+//		exp.setLocalDate(LocalDate.now());
+//		exp.setDescription(wr.getDescription(false));
+//		
+//		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionDetails> parentsExceptionHandler(Exception ex, WebRequest wr) {

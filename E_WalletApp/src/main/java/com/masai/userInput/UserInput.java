@@ -20,7 +20,7 @@ public class UserInput {
 	private String phone;
 	@Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}",message = "Invalid Password")
 	private String password;
-	@Size(min = 3,max = 15,message = "Invaild Name")
+	@Size(min = 3,max = 30,message = "Invaild Name")
 	private String name;
 	
 	@Override
