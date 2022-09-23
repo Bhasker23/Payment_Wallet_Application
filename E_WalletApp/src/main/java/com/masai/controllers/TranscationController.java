@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.models.Transaction;
-import com.masai.servicesImpl.TransactionServiceImpl;
+import com.masai.services.TransactionServiceImpl;
 
 @RestController
 @RequestMapping("/transaction")
@@ -19,9 +19,9 @@ public class TranscationController {
 	@Autowired
 	TransactionServiceImpl transactionServiceImpl;
 
-	public Transaction addTransactionHandler(Transaction transaction, String userId) {
+	public Transaction addTransactionHandler(Transaction transaction) {
 
-		return transactionServiceImpl.addTransactionService(transaction, userId);
+		return transactionServiceImpl.addTransactionService(transaction);
 
 	}
 	// =============================================================================================
