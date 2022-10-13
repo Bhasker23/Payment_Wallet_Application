@@ -1,6 +1,7 @@
 package com.masai.services;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.masai.exceptions.NotAnyBankAddedYet;
 import com.masai.exceptions.UserNotLogedinException;
 import com.masai.models.BankAccount;
 import com.masai.models.UserAccountDetails;
+import com.masai.payloads.CurrentSession;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveBankAccDAL;
@@ -31,9 +33,10 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 	@Override
 	public BankAccount addBank(BankAccount bankAccount, String uniqueId) throws UserNotLogedinException,BankAlreadyAdded {
 		
-		UserAccountDetails user = userDB.findById((loginDb.findById(uniqueId).get()).getUserId()).get();
+		Optional<CurrentSession> loggedUser = loginDb.findById(uniqueId);
 		
-		if(user==null) {
+		
+		if(loggedUser.isEmpty()) {
 			throw new UserNotLogedinException("Please Login first");
 		}
 		
@@ -41,6 +44,8 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 		if((bankDetrailsDb.findById(bankAccount.getAccountNumber())).isPresent()) {
 			throw new BankAlreadyAdded("Bank with "+bankAccount.getAccountNumber()+" this Account Nuber Already Exist");
 		}
+		
+		UserAccountDetails user = userDB.findById(loggedUser.get().getUserId()).get();
 		
 		bankAccount.setUser(user);
 		user.getBankAccounts().add(bankAccount);
@@ -51,26 +56,27 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 
 	@Override
 	public BankAccount removeBank(Integer accountNumber,String uniqueId) throws BankAccountNotExsists, UserNotLogedinException{
-		UserAccountDetails user = userDB.findById((loginDb.findById(uniqueId).get()).getUserId()).get();
 		
-		if(user==null) {
+		Optional<CurrentSession> loggedUser = loginDb.findById(uniqueId);
+		
+		if(loggedUser.isEmpty()) {
 			throw new UserNotLogedinException("Please Login first");
 		}
-		
+		UserAccountDetails user = userDB.findById(loggedUser.get().getUserId()).get();
 		if((bankDetrailsDb.findById(accountNumber)).isEmpty()) {
 			throw new BankAccountNotExsists("Bank with "+accountNumber+" this Account Nuber not Exist");
 		}
 		
 		BankAccount removedBankAccount = bankDetrailsDb.findById(accountNumber).get(); 
 		
-		System.out.println(removedBankAccount.getAccountNumber());
-		System.out.println(user.getBankAccounts().size());
 		if(!user.getBankAccounts().contains(removedBankAccount)) {
 			throw new BankAccountNotExsists("Bank with "+accountNumber+" Account Number does not present");
 		}
 		
+		user.getBankAccounts().remove(removedBankAccount);
 		bankDetrailsDb.delete(removedBankAccount);
 		
+		userDB.save(user);
 		return removedBankAccount;
 	}
 
@@ -80,14 +86,17 @@ public class BankAccountServicesImpl implements BankServicesIntr {
 		if(user==null) {
 			throw new UserNotLogedinException("Please Login first");
 		}
-		
+	    
 		BankAccount bankAccount = bankDetrailsDb.findById(accountNumber).get();
-	
 
 		if(!user.getBankAccounts().contains(bankAccount)) {
 			throw new BankAccountNotExsists("Bank with "+accountNumber+" this Account Nuber not Exist");
 		}
 		
+		user.getBankAccounts().remove(bankAccount);
+		bankDetrailsDb.delete(bankAccount);
+		
+		userDB.save(user);
 		
 		return bankAccount;
 	}

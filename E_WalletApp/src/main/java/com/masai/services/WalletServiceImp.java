@@ -17,12 +17,12 @@ import com.masai.models.CoustomerWithWallet;
 import com.masai.models.Customer;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
+import com.masai.payloads.Credentials;
+import com.masai.payloads.CurrentSession;
+import com.masai.payloads.PasswordGenerator;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.userInput.Credentials;
-import com.masai.userInput.CurrentSession;
-import com.masai.userInput.PasswordGenerator;
 
 @Service
 @RequestMapping("/wallet")

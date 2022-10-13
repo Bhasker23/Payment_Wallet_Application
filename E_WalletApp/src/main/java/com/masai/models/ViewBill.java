@@ -11,7 +11,7 @@ import lombok.experimental.NonFinal;
 public class ViewBill {
 
 	private Integer billId;
-	private double BillAmount;
+	private Double BillAmount;
 	private String BillType;
 	private Integer WalletId;
 }

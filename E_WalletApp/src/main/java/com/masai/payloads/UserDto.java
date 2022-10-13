@@ -1,4 +1,4 @@
-package com.masai.userInput;
+package com.masai.payloads;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInput {
+public class UserDto {
 	
 	@Pattern(regexp = "^[6-9][0-9]{9}",message = "Invaild Phone Number")
 	private String phone;
@@ -31,7 +31,7 @@ public class UserInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserInput other = (UserInput) obj;
+		UserDto other = (UserDto) obj;
 		return Objects.equals(password, other.password) && Objects.equals(phone, other.phone);
 	}
 	

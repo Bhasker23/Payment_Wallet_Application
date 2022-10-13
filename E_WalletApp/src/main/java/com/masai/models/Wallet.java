@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,11 +29,12 @@ public class Wallet {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Integer walletId;
 	@Min(value = 0)
 	private Double balance;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private UserAccountDetails user;
 }

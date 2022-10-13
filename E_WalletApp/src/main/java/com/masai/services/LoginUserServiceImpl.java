@@ -1,18 +1,19 @@
 package com.masai.services;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.exceptions.UserNotFindException;
 import com.masai.models.Customer;
+import com.masai.payloads.Credentials;
+import com.masai.payloads.CurrentSession;
+import com.masai.payloads.Login;
+import com.masai.payloads.PasswordGenerator;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.SaveCustomerDAL;
-import com.masai.userInput.Credentials;
-import com.masai.userInput.CurrentSession;
-import com.masai.userInput.Login;
-import com.masai.userInput.PasswordGenerator;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -48,13 +49,14 @@ public class LoginUserServiceImpl implements LoginUserServicIntr {
 
 		currentSession.setName(opt.get().getName());
 		currentSession.setUserId(opt.get().getPhone());
-
-		String uniqueID = RandomString.make(5);
-		currentSession.setUniqueid(uniqueID);
+  
+		UUID uuid = UUID.randomUUID();
+		
+		currentSession.setUniqueid(uuid.toString().replace("-", ""));
 
 		currentUserDB.save(currentSession);
 
-		return uniqueID;
+		return uuid.toString().replace("-", "");
 
 	}
 

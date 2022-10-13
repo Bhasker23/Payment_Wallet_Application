@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import com.masai.exceptions.UserNotLogedinException;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
+import com.masai.payloads.CurrentSession;
 import com.masai.repositories.LoginDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveTransactionDAL;
-import com.masai.userInput.CurrentSession;
 
 @Service
 public class TransactionServiceImpl implements TransactionServiceIntr {

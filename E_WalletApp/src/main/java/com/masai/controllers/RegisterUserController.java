@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.exceptions.UserInputInvalidException;
 import com.masai.models.UserAccountDetails;
+import com.masai.payloads.UserDto;
 import com.masai.services.RegisterUserServiceImpl;
-import com.masai.userInput.UserInput;
 
 @RestController
 @RequestMapping("/user")
@@ -24,7 +24,7 @@ public class RegisterUserController {
 	private RegisterUserServiceImpl curd;
 
 	@PostMapping("/register")
-	public ResponseEntity<UserAccountDetails> registerUser(@Valid @RequestBody UserInput input) {
+	public ResponseEntity<UserAccountDetails> registerUser(@Valid @RequestBody UserDto input) {
 		
 		UserAccountDetails savedCustomer = curd.registerUser(input);
 

@@ -1,10 +1,10 @@
 package com.masai.services;
 
 import com.masai.models.UserAccountDetails;
-import com.masai.userInput.UserInput;
+import com.masai.payloads.UserDto;
 
 public interface RegisterUserServiceIntr {
 
-	public UserAccountDetails registerUser(UserInput input);
+	public UserAccountDetails registerUser(UserDto input);
 
 }

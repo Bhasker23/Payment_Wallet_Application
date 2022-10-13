@@ -15,11 +15,11 @@ import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.models.ViewBill;
 import com.masai.models.Wallet;
+import com.masai.payloads.CurrentSession;
 import com.masai.repositories.BillPaymentDAO;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
 import com.masai.repositories.SaveWalletDAL;
-import com.masai.userInput.CurrentSession;
 
 @Service
 public class BillPaymentImpl implements BillPaymentIntr {

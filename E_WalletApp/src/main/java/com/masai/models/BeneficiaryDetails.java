@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -20,18 +21,16 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Beneficiaries")
 public class BeneficiaryDetails {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Integer id;
 	@Id
 	@Pattern(regexp = "^[6-9][0-9]{9}", message = "Invaild Phone Number")
 	private String phoneNumber;
 	@Size(min = 3, max = 20)
 	private String name;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private UserAccountDetails user;
 

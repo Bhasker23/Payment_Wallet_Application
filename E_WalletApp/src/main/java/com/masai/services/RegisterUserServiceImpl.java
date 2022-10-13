@@ -1,5 +1,10 @@
 package com.masai.services;
 
+import java.util.HashSet;
+
+import javax.transaction.Transactional;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +15,10 @@ import com.masai.models.Customer;
 import com.masai.models.Transaction;
 import com.masai.models.UserAccountDetails;
 import com.masai.models.Wallet;
+import com.masai.payloads.Credentials;
+import com.masai.payloads.PasswordGenerator;
+import com.masai.payloads.UserDto;
 import com.masai.repositories.RegisterUserDAL;
-import com.masai.userInput.Credentials;
-import com.masai.userInput.PasswordGenerator;
-import com.masai.userInput.UserInput;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
@@ -25,31 +30,30 @@ public class RegisterUserServiceImpl implements RegisterUserServiceIntr {
 	private PasswordGenerator passGenerater;
 	
 	@Override
-	public UserAccountDetails registerUser(UserInput input) {
+	@Transactional
+	public UserAccountDetails registerUser(UserDto userDto) {
 
-		if ((userDB.findById(input.getPhone())).isPresent()) {
+		if ((userDB.findById(userDto.getPhone())).isPresent()) {
 			throw new UserAlreadyExistException("You are already SignedUp please Login.");
 		}
-
-		Customer customer = new Customer();
-
-		customer.setName(input.getName());
-		customer.setPhone(input.getPhone());
-		customer.setPassword(passGenerater.getPass(new Credentials(input.getPhone(),input.getPassword())));
-	    
-	    Wallet wallet = new Wallet();
-	    
-	    UserAccountDetails userAccountDetails = new UserAccountDetails();
-	    
-	    userAccountDetails.setId(customer.getPhone());
-	    userAccountDetails.setCustomer(customer);
-	    userAccountDetails.setWallet(wallet);
         
-	    wallet.setUser(userAccountDetails);
+		ModelMapper modelMapper = new ModelMapper();
+		
+		Customer customer = modelMapper.map(userDto, Customer.class);
+		customer.setPassword(passGenerater.getPass(new Credentials(customer.getPhone(), customer.getPassword())));
+		
+		UserAccountDetails userAccountDetails = new UserAccountDetails();
+		
+		userAccountDetails.setCustomer(customer);
+		userAccountDetails.setWallet(new Wallet());
+		userAccountDetails.setBankAccounts(new HashSet<BankAccount>());
+		userAccountDetails.setBeneficiaryDetails(new HashSet<BeneficiaryDetails>());
+		userAccountDetails.setTransactions(new HashSet<Transaction>());
+		
 	    customer.setUser(userAccountDetails);
-	    userDB.save(userAccountDetails);
+	    userAccountDetails.getWallet().setUser(userAccountDetails);
+	    userAccountDetails.setId(userDto.getPhone());
 	    
-	    userAccountDetails.getCustomer().setPassword(input.getPassword());
-	    return userAccountDetails;
+	    return userDB.save(userAccountDetails);
 	}
 }

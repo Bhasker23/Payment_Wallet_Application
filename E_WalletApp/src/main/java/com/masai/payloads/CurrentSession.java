@@ -1,4 +1,4 @@
-package com.masai.userInput;
+package com.masai.payloads;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

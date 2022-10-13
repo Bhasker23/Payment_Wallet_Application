@@ -11,10 +11,10 @@ import com.masai.exceptions.BeneficiaryNotFound;
 import com.masai.exceptions.InvalidBeneficiaryDetails;
 import com.masai.models.BeneficiaryDetails;
 import com.masai.models.UserAccountDetails;
+import com.masai.payloads.CurrentSession;
 import com.masai.repositories.BeneficiaryDetailsDao;
 import com.masai.repositories.CurrentSessionDAL;
 import com.masai.repositories.RegisterUserDAL;
-import com.masai.userInput.CurrentSession;
 
 @Service
 public class BeneficiaryDetailsImpl implements BenificiaryDetailsServiceIntr {

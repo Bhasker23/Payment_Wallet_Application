@@ -1,7 +1,7 @@
 package com.masai.services;
 
 
-import com.masai.userInput.Login;
+import com.masai.payloads.Login;
 
 
 

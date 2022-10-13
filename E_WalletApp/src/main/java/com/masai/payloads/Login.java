@@ -1,4 +1,4 @@
-package com.masai.userInput;
+package com.masai.payloads;
 
 import java.util.Objects;
 
